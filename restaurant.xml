@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<restoran xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:noNamespaceSchemaLocation="restaurant.xsd">
+    <info id="rest001" nimi="Gourmet Palace" aadress="Tallinn, Viru 10" telefon="+372 123 4567">
+        <kirjeldus>Eksklusiivne restoran südamekesk</kirjeldus>
+        <avamisajad>
+            <esmaspäev>10:00-22:00</esmaspäev>
+            <teisipäev>10:00-22:00</teisipäev>
+            <kolmapäev>10:00-22:00</kolmapäev>
+            <neljapäev>10:00-22:00</neljapäev>
+            <reede>10:00-23:00</reede>
+            <laupäev>12:00-23:00</laupäev>
+            <pühapäev>12:00-21:00</pühapäev>
+        </avamisajad>
+    </info>
+
+    <menüü>
+        <toidud kategooria="põhiroogad">
+            <toit id="t001" nimi="Grillitud lõhe" hind="24.90" valmimisaeg="25" allergeenid="kala">
+                <kirjeldus>Värske Norra lõhe grillil, lisaks kartulipüree ja köögiviljad</kirjeldus>
+                <koostisosad>
+                    <koostisosa>lõhefilää 200g</koostisosa>
+                    <koostisosa>kartul 150g</koostisosa>
+                    <koostisosa>porgand 50g</koostisosa>
+                    <koostisosa>brokoli 50g</koostisosa>
+                </koostisosad>
+                <toiteväärtus kalorsus="450" valgud="35" rasv="15" süsivesikud="25"/>
+                <spetsiaalne_dieet vegan="ei" vegetarian="ei" gluteenivaba="jah"/>
+            </toit>
+            <toit id="t002" nimi="Pasta Carbonara" hind="16.50" valmimisaeg="15" allergeenid="gluten,munad,piim">
+                <kirjeldus>Klassikaline Itaalia pasta soolalihaga ja kreemise kastmega</kirjeldus>
+                <koostisosad>
+                    <koostisosa>fettuccine pasta 120g</koostisosa>
+                    <koostisosa>soolaand 80g</koostisosa>
+                    <koostisosa>muna 2tk</koostisosa>
+                    <koostisosa>parmesan juust 30g</koostisosa>
+                </koostisosad>
+                <toiteväärtus kalorsus="650" valgud="28" rasv="25" süsivesikud="75"/>
+                <spetsiaalne_dieet vegan="ei" vegetarian="ei" gluteenivaba="ei"/>
+            </toit>
+            <toit id="t003" nimi="Vegan Buddha Bowl" hind="14.90" valmimisaeg="20" allergeenid="pähklid">
+                <kirjeldus>Toitainerikas kausis quinoa, avokaado, küpsetatud köögiviljad ja tofuga</kirjeldus>
+                <koostisosad>
+                    <koostisosa>quinoa 100g</koostisosa>
+                    <koostisosa>tofu 80g</koostisosa>
+                    <koostisosa>avokaado 1tk</koostisosa>
+                    <koostisosa>maguskartul 100g</koostisosa>
+                    <koostisosa>pähklid 20g</koostisosa>
+                </koostisosad>
+                <toiteväärtus kalorsus="520" valgud="18" rasv="22" süsivesikud="65"/>
+                <spetsiaalne_dieet vegan="jah" vegetarian="jah" gluteenivaba="jah"/>
+            </toit>
+        </toidud>
+
+        <joogid kategooria="alkoholivabad">
+            <jook id="j001" nimi="Kohv Americano" hind="3.50" maht="250ml" temperatuur="kuum">
+                <kirjeldus>Klassikaline must kohv</kirjeldus>
+                <koostis>100% Araabia kohviubadest</koostis>
+                <kofeiini_sisaldus>95mg</kofeiini_sisaldus>
+            </jook>
+            <jook id="j002" nimi="Värske apelsini mahl" hind="4.20" maht="300ml" temperatuur="külm">
+                <kirjeldus>Värsketest apelsinidest pressitud mahl</kirjeldus>
+                <koostis>100% apelsini mahl</koostis>
+                <vitamiinid>C vitamiin 80mg</vitamiinid>
+            </jook>
+            <jook id="j003" nimi="Veini "Riesling"" hind="8.50" maht="150ml" temperatuur="külm" alkohol="12.5%">
+                <kirjeldus>Kuiv valge vein Saksamaalt</kirjeldus>
+                <veinimärka>German Riesling 2022</veinimärka>
+                <päritolu>Saksamaa, Rheingau</päritolu>
+            </jook>
+        </joogid>
+
+        <eelroogad kategooria="külmad">
+            <toit id="e001" nimi="Caesar salat" hind="12.90" valmimisaeg="10" allergeenid="piim,munad">
+                <kirjeldus>Krevettidega Caesar salat</kirjeldus>
+                <koostisosad>
+                    <koostisosa>jäälatud 100g</koostisosa>
+                    <koostisosa>krevetid 80g</koostisosa>
+                    <koostisosa>parmesan 25g</koostisosa>
+                    <koostisosa>krutooni 30g</koostisosa>
+                </koostisosad>
+                <toiteväärtus kalorsus="280" valgud="20" rasv="18" süsivesikud="12"/>
+                <spetsiaalne_dieet vegan="ei" vegetarian="ei" gluteenivaba="ei"/>
+            </toit>
+        </eelroogad>
+
+        <magustoidud kategooria="külmad">
+            <toit id="m001" nimi="Tiramisu" hind="7.90" valmimisaeg="5" allergeenid="piim,munad,gluten">
+                <kirjeldus>Klassikaline Itaalia magustoit</kirjeldus>
+                <koostisosad>
+                    <koostisosa>mascarpone 80g</koostisosa>
+                    <koostisosa>ladyfinger küpsised 60g</koostisosa>
+                    <koostisosa>kohv espresso 50ml</koostisosa>
+                    <koostisosa>kakao pulber 5g</koostisosa>
+                </koostisosad>
+                <toiteväärtus kalorsus="320" valgud="8" rasv="22" süsivesikud="26"/>
+                <spetsiaalne_dieet vegan="ei" vegetarian="jah" gluteenivaba="ei"/>
+            </toit>
+        </magustoidud>
+    </menüü>
+
+    <töökorraldus>
+        <laudad>
+            <laud id="l001" number="1" kohtade_arv="2" ala="aken" staatus="vaba">
+                <asukoht>akna ääres, vaade merele</asukoht>
+                <spetsiaalsed_omadused romantiline="jah" ligipääsetav="ei"/>
+            </laud>
+            <laud id="l002" number="2" kohtade_arv="4" ala="keskmine" staatus="broneeritud">
+                <asukoht>keskmises saalis</asukoht>
+                <spetsiaalsed_omadused romantiline="ei" ligipääsetav="jah"/>
+                <broneering klient="Mart Mets" aeg="2024-11-13T19:00:00" telefon="+372 5123456"/>
+            </laud>
+            <laud id="l003" number="3" kohtade_arv="6" ala="VIP" staatus="hõivatud">
+                <asukoht>VIP tsoonis, eraldi nurgas</asukoht>
+                <spetsiaalsed_omadused romantiline="jah" ligipääsetav="jah"/>
+            </laud>
+            <laud id="l004" number="4" kohtade_arv="8" ala="peosaal" staatus="vaba">
+                <asukoht>suures saalis</asukoht>
+                <spetsiaalsed_omadused romantiline="ei" ligipääsetav="jah"/>
+            </laud>
+        </laudad>
+
+        <teenindajad>
+            <teenindaja id="tn001" nimi="Mari Tamm" amet="pearkelner" tööstaaž="5" keel="eesti,inglise">
+                <kontakt telefon="+372 51234567" email="mari.tamm@restaurant.ee"/>
+                <töötunni_info tööpäevad="E,T,K,N,R" tööaeg="10:00-22:00"/>
+                <vastutusala>VIP tsoon, akende äär</vastutusala>
+                <sertifikaadid>
+                    <sertifikaat>Veinisommeljeeri kursus</sertifikaat>
+                    <sertifikaat>Esmaabi kursus</sertifikaat>
+                </sertifikaadid>
+            </teenindaja>
+            <teenindaja id="tn002" nimi="Jaan Kask" amet="kelner" tööstaaž="2" keel="eesti,vene">
+                <kontakt telefon="+372 51234568" email="jaan.kask@restaurant.ee"/>
+                <töötunni_info tööpäevad="T,K,N,R,L" tööaeg="12:00-24:00"/>
+                <vastutusala>keskmine saal, peosaal</vastutusala>
+                <sertifikaadid>
+                    <sertifikaat>Teeninduse kursus</sertifikaat>
+                </sertifikaadid>
+            </teenindaja>
+            <teenindaja id="tn003" nimi="Anna Saar" amet="kelner" tööstaaž="3" keel="eesti,inglise,soome">
+                <kontakt telefon="+372 51234569" email="anna.saar@restaurant.ee"/>
+                <töötunni_info tööpäevad="L,P" tööaeg="12:00-23:00"/>
+                <vastutusala>kõik alad</vastutusala>
+                <sertifikaadid>
+                    <sertifikaat>Allergeenide käsitlemise kursus</sertifikaat>
+                </sertifikaadid>
+            </teenindaja>
+        </teenindajad>
+
+        <tellimused>
+            <tellimus id="tel001" laua_nr="l003" teenindaja_id="tn001" kuupäev="2024-11-13" kellaaeg="18:30:00" 
+                      klientide_arv="4" erivajadused="gluteenivaba dieet">
+                <tellimusestaatus praegune="valmistamine" 
+                               tellimusaeg="2024-11-13T18:30:00"
+                               köökiaeg="2024-11-13T18:35:00"
+                               valmimisaeg="2024-11-13T19:00:00"
+                               serveerimisaeg="">
+                    <staatuse_ajalugu>
+                        <staatus aeg="2024-11-13T18:30:00">vastu võetud</staatus>
+                        <staatus aeg="2024-11-13T18:32:00">edastatud köögile</staatus>
+                        <staatus aeg="2024-11-13T18:35:00">valmistamine algas</staatus>
+                    </staatuse_ajalugu>
+                </tellimusestaatus>
+                
+                <tellitud_tooted>
+                    <toode tüüp="toit" id="t001" kogus="2" märkused="keskmine küpsetus">
+                        <nimi>Grillitud lõhe</nimi>
+                        <ühiku_hind>24.90</ühiku_hind>
+                        <kogusumma>49.80</kogusumma>
+                    </toode>
+                    <toode tüüp="toit" id="e001" kogus="1" märkused="">
+                        <nimi>Caesar salat</nimi>
+                        <ühiku_hind>12.90</ühiku_hind>
+                        <kogusumma>12.90</kogusumma>
+                    </toode>
+                    <toode tüüp="jook" id="j003" kogus="2" märkused="">
+                        <nimi>Veini "Riesling"</nimi>
+                        <ühiku_hind>8.50</ühiku_hind>
+                        <kogusumma>17.00</kogusumma>
+                    </toode>
+                    <toode tüüp="jook" id="j002" kogus="2" märkused="">
+                        <nimi>Värske apelsini mahl</nimi>
+                        <ühiku_hind>4.20</ühiku_hind>
+                        <kogusumma>8.40</kogusumma>
+                    </toode>
+                </tellitud_tooted>
+                
+                <arveldus>
+                    <vahesumma>88.10</vahesumma>
+                    <käibemaks määr="20%">17.62</käibemaks>
+                    <teenustasu määr="10%">8.81</teenustasu>
+                    <lõppsumma>114.53</lõppsumma>
+                    <makseviis></makseviis>
+                    <makse_staatus>maksmata</makse_staatus>
+                </arveldus>
+            </tellimus>
+
+            <tellimus id="tel002" laua_nr="l001" teenindaja_id="tn001" kuupäev="2024-11-13" kellaaeg="19:15:00" 
+                      klientide_arv="2" erivajadused="vegane menüü">
+                <tellimusestaatus praegune="vastu võetud" 
+                               tellimusaeg="2024-11-13T19:15:00"
+                               köökiaeg=""
+                               valmimisaeg=""
+                               serveerimisaeg="">
+                    <staatuse_ajalugu>
+                        <staatus aeg="2024-11-13T19:15:00">vastu võetud</staatus>
+                    </staatuse_ajalugu>
+                </tellimusestaatus>
+                
+                <tellitud_tooted>
+                    <toode tüüp="toit" id="t003" kogus="2" märkused="lisaks avokaado">
+                        <nimi>Vegan Buddha Bowl</nimi>
+                        <ühiku_hind>14.90</ühiku_hind>
+                        <kogusumma>29.80</kogusumma>
+                    </toode>
+                    <toode tüüp="jook" id="j002" kogus="2" märkused="">
+                        <nimi>Värske apelsini mahl</nimi>
+                        <ühiku_hind>4.20</ühiku_hind>
+                        <kogusumma>8.40</kogusumma>
+                    </toode>
+                </tellitud_tooted>
+                
+                <arveldus>
+                    <vahesumma>38.20</vahesumma>
+                    <käibemaks määr="20%">7.64</käibemaks>
+                    <teenustasu määr="10%">3.82</teenustasu>
+                    <lõppsumma>49.66</lõppsumma>
+                    <makseviis></makseviis>
+                    <makse_staatus>maksmata</makse_staatus>
+                </arveldus>
+            </tellimus>
+
+            <tellimus id="tel003" laua_nr="l004" teenindaja_id="tn002" kuupäev="2024-11-13" kellaaeg="17:45:00" 
+                      klientide_arv="6" erivajadused="">
+                <tellimusestaatus praegune="lõpetatud" 
+                               tellimusaeg="2024-11-13T17:45:00"
+                               köökiaeg="2024-11-13T17:48:00"
+                               valmimisaeg="2024-11-13T18:25:00"
+                               serveerimisaeg="2024-11-13T18:30:00">
+                    <staatuse_ajalugu>
+                        <staatus aeg="2024-11-13T17:45:00">vastu võetud</staatus>
+                        <staatus aeg="2024-11-13T17:47:00">edastatud köögile</staatus>
+                        <staatus aeg="2024-11-13T17:48:00">valmistamine algas</staatus>
+                        <staatus aeg="2024-11-13T18:25:00">valmis</staatus>
+                        <staatus aeg="2024-11-13T18:30:00">serveeritud</staatus>
+                        <staatus aeg="2024-11-13T19:00:00">lõpetatud</staatus>
+                    </staatuse_ajalugu>
+                </tellimusestaatus>
+                
+                <tellitud_tooted>
+                    <toode tüüp="toit" id="t002" kogus="3" märkused="">
+                        <nimi>Pasta Carbonara</nimi>
+                        <ühiku_hind>16.50</ühiku_hind>
+                        <kogusumma>49.50</kogusumma>
+                    </toode>
+                    <toode tüüp="toit" id="t001" kogus="2" märkuses="">
+                        <nimi>Grillitud lõhe</nimi>
+                        <ühiku_hind>24.90</ühiku_hind>
+                        <kogusumma>49.80</kogusumma>
+                    </toode>
+                    <toode tüüp="toit" id="m001" kogus="4" märkused="">
+                        <nimi>Tiramisu</nimi>
+                        <ühiku_hind>7.90</ühiku_hind>
+                        <kogusumma>31.60</kogusumma>
+                    </toode>
+                    <toode tüüp="jook" id="j001" kogus="4" märkused="">
+                        <nimi>Kohv Americano</nimi>
+                        <ühiku_hind>3.50</ühiku_hind>
+                        <kogusumma>14.00</kogusumma>
+                    </toode>
+                    <toode tüüp="jook" id="j003" kogus="3" märkuses="">
+                        <nimi>Veini "Riesling"</nimi>
+                        <ühiku_hind>8.50</ühiku_hind>
+                        <kogusumma>25.50</kogusumma>
+                    </toode>
+                </tellitud_tooted>
+                
+                <arveldus>
+                    <vahesumma>170.40</vahesumma>
+                    <käibemaks määr="20%">34.08</käibemaks>
+                    <teenustasu määr="12%">20.45</teenustasu>
+                    <lõppsumma>224.93</lõppsumma>
+                    <makseviis>kaart</makseviis>
+                    <makse_staatus>makstud</makse_staatus>
+                </arveldus>
+            </tellimus>
+        </tellimused>
+    </töökorraldus>
+</restoran>
