@@ -64,7 +64,7 @@
                 <koostis>100% apelsini mahl</koostis>
                 <vitamiinid>C vitamiin 80mg</vitamiinid>
             </jook>
-            <jook id="j003" nimi="Veini "Riesling"" hind="8.50" maht="150ml" temperatuur="külm" alkohol="12.5%">
+            <jook id="j003" nimi="Veini &quot;Riesling&quot;" hind="8.50" maht="150ml" temperatuur="külm" alkohol="12.5%">
                 <kirjeldus>Kuiv valge vein Saksamaalt</kirjeldus>
                 <veinimärka>German Riesling 2022</veinimärka>
                 <päritolu>Saksamaa, Rheingau</päritolu>
@@ -255,7 +255,7 @@
                         <ühiku_hind>16.50</ühiku_hind>
                         <kogusumma>49.50</kogusumma>
                     </toode>
-                    <toode tüüp="toit" id="t001" kogus="2" märkuses="">
+                    <toode tüüp="toit" id="t001" kogus="2" märkused="">
                         <nimi>Grillitud lõhe</nimi>
                         <ühiku_hind>24.90</ühiku_hind>
                         <kogusumma>49.80</kogusumma>
@@ -270,7 +270,7 @@
                         <ühiku_hind>3.50</ühiku_hind>
                         <kogusumma>14.00</kogusumma>
                     </toode>
-                    <toode tüüp="jook" id="j003" kogus="3" märkuses="">
+                    <toode tüüp="jook" id="j003" kogus="3" märkused="">
                         <nimi>Veini "Riesling"</nimi>
                         <ühiku_hind>8.50</ühiku_hind>
                         <kogusumma>25.50</kogusumma>

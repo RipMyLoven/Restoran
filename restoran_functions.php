@@ -101,6 +101,7 @@ class RestoranManager {
             'populaarsemad_toidud' => [],
             'laudade_hõivatus' => [
                 'vabad' => 0,
+                'vaba' => 0,
                 'hõivatud' => 0,
                 'broneeritud' => 0
             ]
