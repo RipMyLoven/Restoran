@@ -1,0 +1,34 @@
+{
+  "users": [
+    {
+      "id": "user_1763118554190",
+      "name": "Waiter1",
+      "role": "waiter",
+      "created": "2025-11-14T11:09:14.190Z"
+    },
+    {
+      "id": "user_1763118565932",
+      "name": "Waiter2",
+      "role": "waiter",
+      "created": "2025-11-14T11:09:25.932Z"
+    },
+    {
+      "id": "user_1763118572462",
+      "name": "Waiter3",
+      "role": "waiter",
+      "created": "2025-11-14T11:09:32.462Z"
+    },
+    {
+      "id": "user_1763118578599",
+      "name": "Kitchen1",
+      "role": "kitchen",
+      "created": "2025-11-14T11:09:38.599Z"
+    },
+    {
+      "id": "user_1763118584334",
+      "name": "Admin1",
+      "role": "admin",
+      "created": "2025-11-14T11:09:44.334Z"
+    }
+  ]
+}

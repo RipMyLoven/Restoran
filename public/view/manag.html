@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Management</title>
+    <link rel="stylesheet" href="../css/global.css">
+</head>
+<body>
+    <header>
+        <h1>Restaurant Management</h1>
+        <nav>
+            <button onclick="showSection('orders')">Orders</button>
+            <button onclick="showSection('kitchen')">Kitchen</button>
+            <button onclick="showSection('waiter')">Waiter</button>
+            <button onclick="showSection('tables')">Tables</button>
+            <button onclick="showSection('users')">Users</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section id="orders" class="section">
+            <h2>Orders</h2>
+            <form id="orderForm">
+                <label>Table:</label>
+                <select id="tableId" required></select>
+                
+                <label>Waiter:</label>
+                <select id="waiterId" required></select>
+                
+                <label>Menu Items:</label>
+                <div id="menuItems"></div>
+                
+                <button type="button" onclick="addMenuItem()">Add Item</button>
+                <button type="submit">Create Order</button>
+            </form>
+            <div id="ordersList"></div>
+        </section>
+
+        <section id="kitchen" class="section" style="display:none">
+            <h2>Kitchen</h2>
+            <div id="kitchenOrders"></div>
+        </section>
+
+        <section id="waiter" class="section" style="display:none">
+            <h2>Waiter Panel</h2>
+            <div id="waiterOrders"></div>
+        </section>
+
+        <section id="tables" class="section" style="display:none">
+            <h2>Tables</h2>
+            <form id="tableForm">
+                <input type="text" id="tableName" placeholder="Table Name" required>
+                <input type="number" id="tableSeats" placeholder="Seats" required>
+                <input type="text" id="tableTags" placeholder="Tags (comma separated)">
+                <button type="submit">Add Table</button>
+            </form>
+            <div id="tablesList"></div>
+        </section>
+
+        <section id="users" class="section" style="display:none">
+            <h2>Users</h2>
+            <form id="userForm">
+                <input type="text" id="userName" placeholder="Name" required>
+                <select id="userRole" required>
+                    <option value="">Select Role</option>
+                    <option value="waiter">Waiter</option>
+                    <option value="kitchen">Kitchen</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button type="submit">Create User</button>
+            </form>
+            <div id="usersList"></div>
+        </section>
+    </div>
+
+    <script src="../js/management.js"></script>
+</body>
+</html>

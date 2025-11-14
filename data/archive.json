@@ -1,0 +1,92 @@
+{
+  "orders": [
+    {
+      "id": "order_1763118896212",
+      "status": "sent_to_kitchen",
+      "created": "2025-11-14T11:14:56.212Z",
+      "statusHistory": [
+        {
+          "status": "received",
+          "time": "2025-11-14T11:14:56.212Z"
+        },
+        {
+          "status": "sent_to_kitchen",
+          "time": "2025-11-14T11:14:57.529Z"
+        }
+      ],
+      "tableId": "l002",
+      "waiterId": "tn003",
+      "items": [
+        {
+          "itemId": "e001",
+          "name": "Caesar salat",
+          "price": 12.9,
+          "quantity": 1
+        },
+        {
+          "itemId": "m001",
+          "name": "Tiramisu",
+          "price": 7.9,
+          "quantity": 1
+        },
+        {
+          "itemId": "t002",
+          "name": "Pasta Carbonara",
+          "price": 16.5,
+          "quantity": 1
+        }
+      ],
+      "kitchenNotified": "2025-11-14T11:14:57.526Z",
+      "archivedAt": "2025-11-14T11:14:59.449Z"
+    },
+    {
+      "id": "order_1763118924732",
+      "status": "served",
+      "created": "2025-11-14T11:15:24.732Z",
+      "statusHistory": [
+        {
+          "status": "received",
+          "time": "2025-11-14T11:15:24.732Z"
+        },
+        {
+          "status": "sent_to_kitchen",
+          "time": "2025-11-14T11:15:25.737Z"
+        },
+        {
+          "status": "ready",
+          "time": "2025-11-14T11:15:28.426Z"
+        },
+        {
+          "status": "served",
+          "time": "2025-11-14T11:15:37.571Z"
+        }
+      ],
+      "tableId": "l001",
+      "waiterId": "tn001",
+      "items": [
+        {
+          "itemId": "e001",
+          "name": "Caesar salat",
+          "price": 12.9,
+          "quantity": 1
+        },
+        {
+          "itemId": "m001",
+          "name": "Tiramisu",
+          "price": 7.9,
+          "quantity": 3
+        },
+        {
+          "itemId": "j003",
+          "name": "Veini ",
+          "price": 8.5,
+          "quantity": 1
+        }
+      ],
+      "kitchenNotified": "2025-11-14T11:15:25.734Z",
+      "readyTime": "2025-11-14T11:15:28.424Z",
+      "servedTime": "2025-11-14T11:15:37.568Z",
+      "archivedAt": "2025-11-14T11:26:10.069Z"
+    }
+  ]
+}

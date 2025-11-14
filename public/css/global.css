@@ -24,6 +24,14 @@ header {
     text-align: center;
 }
 
+header nav {
+    margin-top: 10px;
+}
+
+header nav button {
+    margin: 0 5px;
+}
+
 .menu-section {
     background: #fff;
     margin: 20px 0;
@@ -66,6 +74,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
+    background: #fff;
 }
 
 th, td {
@@ -78,3 +87,71 @@ th {
     background: #333;
     color: #fff;
 }
+
+.section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+form {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.order-item {
+    background: #f9f9f9;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border-left: 4px solid #333;
+}
+
+.order-item h4 {
+    margin-bottom: 10px;
+}
+
+.order-item button {
+    margin-right: 10px;
+    margin-top: 10px;
+    padding: 5px 15px;
+}
+
+.menu-item-select {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    align-items: center;
+}
+
+.menu-item-select select,
+.menu-item-select input {
+    flex: 1;
+    margin: 0;
+}
+
+.menu-item-select button {
+    flex: 0 0 auto;
+    padding: 8px 15px;
+    background: #e74c3c;
+}
+
+.menu-item-select button:hover {
+    background: #c0392b;
+}
+
+.item-quantity {
+    max-width: 80px;
+}
+
