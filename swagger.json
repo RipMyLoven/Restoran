@@ -1,0 +1,389 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Restoran Express API", 
+    "description": "API restoranihaldusse Express.js serveriga",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Express.js server"
+    }
+  ],
+  "paths": {
+    "/api/info": {
+      "get": {
+        "summary": "Saa restorani info",
+        "description": "Tagastab restorani nimi, aadress ja muud andmed",
+        "responses": {
+          "200": {
+            "description": "Edukas vastus",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestoranInfo"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Serveri viga",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/menu": {
+      "get": {
+        "summary": "Saa menüü",
+        "description": "Tagastab kõik menüü toidud ja joogid",
+        "parameters": [
+          {
+            "name": "kategooria",
+            "in": "query",
+            "description": "Toidukategooria filter",
+            "schema": {
+              "type": "string",
+              "enum": ["eelroogad", "põhiroogad", "magustoidud", "joogid"]
+            }
+          },
+          {
+            "name": "maxHind",
+            "in": "query",
+            "description": "Maksimaalne hind",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "vegan",
+            "in": "query",
+            "description": "Ainult vegan toidud",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Edukas vastus",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Menu"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/laudad": {
+      "get": {
+        "summary": "Saa laudade info",
+        "description": "Tagastab kõikide laudade staatuse",
+        "responses": {
+          "200": {
+            "description": "Edukas vastus",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Laud"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/statistika": {
+      "get": {
+        "summary": "Saa statistika",
+        "description": "Tagastab tellimuste ja müügi statistika",
+        "responses": {
+          "200": {
+            "description": "Edukas vastus",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Statistika"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/teenindajad": {
+      "get": {
+        "summary": "Saa teenindajate nimekiri",
+        "description": "Tagastab kõik teenindajad",
+        "responses": {
+          "200": {
+            "description": "Edukas vastus",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Teenindaja"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RestoranInfo": {
+        "type": "object",
+        "properties": {
+          "nimi": {
+            "type": "string",
+            "example": "Gourmet Palace"
+          },
+          "aadress": {
+            "type": "string",
+            "example": "Tallinn, Viru 10"
+          },
+          "telefon": {
+            "type": "string",
+            "example": "+372 123 4567"
+          },
+          "kirjeldus": {
+            "type": "string",
+            "example": "Eksklusiivne restoran südamekesk"
+          },
+          "avamisajad": {
+            "type": "object",
+            "properties": {
+              "esmaspäev": {"type": "string"},
+              "teisipäev": {"type": "string"},
+              "kolmapäev": {"type": "string"},
+              "neljapäev": {"type": "string"},
+              "reede": {"type": "string"},
+              "laupäev": {"type": "string"},
+              "pühapäev": {"type": "string"}
+            }
+          }
+        }
+      },
+      "Menu": {
+        "type": "object",
+        "properties": {
+          "eelroogad": {
+            "type": "array",
+            "items": {"$ref": "#/components/schemas/Toit"}
+          },
+          "põhiroogad": {
+            "type": "array",
+            "items": {"$ref": "#/components/schemas/Toit"}
+          },
+          "magustoidud": {
+            "type": "array",
+            "items": {"$ref": "#/components/schemas/Toit"}
+          },
+          "joogid": {
+            "type": "array",
+            "items": {"$ref": "#/components/schemas/Jook"}
+          }
+        }
+      },
+      "Toit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "t001"
+          },
+          "nimi": {
+            "type": "string",
+            "example": "Grillitud lõhe"
+          },
+          "hind": {
+            "type": "number",
+            "example": 24.9
+          },
+          "kirjeldus": {
+            "type": "string",
+            "example": "Värske Norra lõhe grillil"
+          },
+          "valmimisaeg": {
+            "type": "integer",
+            "example": 25
+          },
+          "allergeenid": {
+            "type": "string",
+            "example": "kala"
+          },
+          "toiteväärtus": {
+            "$ref": "#/components/schemas/Toiteväärtus"
+          },
+          "dieet": {
+            "$ref": "#/components/schemas/Dieet"
+          }
+        }
+      },
+      "Jook": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "j001"
+          },
+          "nimi": {
+            "type": "string",
+            "example": "Kohv Americano"
+          },
+          "hind": {
+            "type": "number",
+            "example": 3.5
+          },
+          "kirjeldus": {
+            "type": "string",
+            "example": "Klassikaline must kohv"
+          },
+          "maht": {
+            "type": "string",
+            "example": "250ml"
+          },
+          "temperatuur": {
+            "type": "string",
+            "example": "kuum"
+          },
+          "alkohol": {
+            "type": "string",
+            "nullable": true,
+            "example": "12.5%"
+          }
+        }
+      },
+      "Toiteväärtus": {
+        "type": "object",
+        "properties": {
+          "kalorsus": {"type": "integer"},
+          "valgud": {"type": "integer"},
+          "rasv": {"type": "integer"},
+          "süsivesikud": {"type": "integer"}
+        }
+      },
+      "Dieet": {
+        "type": "object",
+        "properties": {
+          "vegan": {"type": "boolean"},
+          "vegetarian": {"type": "boolean"},
+          "gluteenivaba": {"type": "boolean"}
+        }
+      },
+      "Laud": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "l001"
+          },
+          "number": {
+            "type": "integer",
+            "example": 1
+          },
+          "kohtade_arv": {
+            "type": "integer",
+            "example": 2
+          },
+          "ala": {
+            "type": "string",
+            "example": "aken"
+          },
+          "staatus": {
+            "type": "string",
+            "enum": ["vaba", "hõivatud", "broneeritud"],
+            "example": "vaba"
+          },
+          "asukoht": {
+            "type": "string",
+            "example": "akna ääres"
+          }
+        }
+      },
+      "Teenindaja": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "tn001"
+          },
+          "nimi": {
+            "type": "string",
+            "example": "Mari Tamm"
+          },
+          "amet": {
+            "type": "string",
+            "example": "pearkelner"
+          },
+          "tööstaaž": {
+            "type": "integer",
+            "example": 5
+          },
+          "keeled": {
+            "type": "string",
+            "example": "eesti,inglise"
+          },
+          "vastutusala": {
+            "type": "string",
+            "example": "VIP tsoon"
+          },
+          "telefon": {
+            "type": "string",
+            "example": "+372 51234567"
+          }
+        }
+      },
+      "Statistika": {
+        "type": "object",
+        "properties": {
+          "aktiivsed_tellimused": {"type": "integer"},
+          "lõpetatud_tellimused": {"type": "integer"},
+          "kokku_tellimusi": {"type": "integer"},
+          "päeva_käive": {"type": "number"},
+          "keskmine_tellimuse_summa": {"type": "number"},
+          "populaarsemad_toidud": {
+            "type": "object",
+            "additionalProperties": {"type": "integer"}
+          },
+          "laudade_hõivatus": {
+            "type": "object",
+            "properties": {
+              "vabad": {"type": "integer"},
+              "vaba": {"type": "integer"},
+              "hõivatud": {"type": "integer"},
+              "broneeritud": {"type": "integer"}
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Viga andmete laadimisel"
+          }
+        }
+      }
+    }
+  }
+}
