@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="info.xsd">
+
+<info id="rest001" nimi="Gourmet Palace" aadress="Tallinn, Viru 10" telefon="+372 123 4567">
+    <kirjeldus>Eksklusiivne restoran südamekesk</kirjeldus>
+    <avamisajad>
+        <esmaspäev>10:00-22:00</esmaspäev>
+        <teisipäev>10:00-22:00</teisipäev>
+        <kolmapäev>10:00-22:00</kolmapäev>
+        <neljapäev>10:00-22:00</neljapäev>
+        <reede>10:00-23:00</reede>
+        <laupäev>12:00-23:00</laupäev>
+        <pühapäev>12:00-21:00</pühapäev>
+    </avamisajad>
+</info>
