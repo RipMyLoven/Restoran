@@ -29,6 +29,18 @@
       "name": "Admin1",
       "role": "admin",
       "created": "2025-11-14T11:09:44.334Z"
+    },
+    {
+      "id": "user_1763120150649",
+      "name": "Musisti",
+      "role": "waiter",
+      "created": "2025-11-14T11:35:50.649Z"
+    },
+    {
+      "id": "user_1763120159477",
+      "name": "Laudoda",
+      "role": "kitchen",
+      "created": "2025-11-14T11:35:59.477Z"
     }
   ]
 }

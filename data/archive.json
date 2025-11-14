@@ -87,6 +87,60 @@
       "readyTime": "2025-11-14T11:15:28.424Z",
       "servedTime": "2025-11-14T11:15:37.568Z",
       "archivedAt": "2025-11-14T11:26:10.069Z"
+    },
+    {
+      "id": "order_1763120190892",
+      "status": "served",
+      "created": "2025-11-14T11:36:30.892Z",
+      "statusHistory": [
+        {
+          "status": "received",
+          "time": "2025-11-14T11:36:30.892Z"
+        },
+        {
+          "status": "sent_to_kitchen",
+          "time": "2025-11-14T11:36:31.914Z"
+        },
+        {
+          "status": "ready",
+          "time": "2025-11-14T11:36:40.605Z"
+        },
+        {
+          "status": "served",
+          "time": "2025-11-14T11:36:50.230Z"
+        }
+      ],
+      "tableId": "l004",
+      "waiterId": "tn003",
+      "items": [
+        {
+          "itemId": "t001",
+          "name": "Grillitud lõhe",
+          "price": 24.9,
+          "quantity": 1
+        }
+      ],
+      "kitchenNotified": "2025-11-14T11:36:31.911Z",
+      "readyTime": "2025-11-14T11:36:40.602Z",
+      "invoice": {
+        "orderId": "order_1763120190892",
+        "tableId": "l004",
+        "items": [
+          {
+            "itemId": "t001",
+            "name": "Grillitud lõhe",
+            "price": 24.9,
+            "quantity": 1
+          }
+        ],
+        "subtotal": "24.90",
+        "tax": "4.98",
+        "service": "2.49",
+        "total": "32.37",
+        "generated": "2025-11-14T11:36:47.029Z"
+      },
+      "servedTime": "2025-11-14T11:36:50.227Z",
+      "archivedAt": "2025-11-14T11:36:55.240Z"
     }
   ]
 }

@@ -186,13 +186,14 @@ async function loadUsers() {
         return;
     }
     
-    list.innerHTML = '<table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Created</th></tr></thead><tbody>' +
+    list.innerHTML = '<table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Created</th><th>Actions</th></tr></thead><tbody>' +
         data.users.map(user => `
             <tr>
                 <td>${user.id}</td>
                 <td>${user.name}</td>
                 <td>${user.role}</td>
                 <td>${new Date(user.created).toLocaleString()}</td>
+                <td><button onclick="deleteUser('${user.id}')">Delete</button></td>
             </tr>
         `).join('') +
         '</tbody></table>';
@@ -352,6 +353,23 @@ async function updateTableStatus(tableId, status) {
         alert('Error: ' + result.error);
     } else {
         loadTables();
+    }
+}
+
+async function deleteUser(userId) {
+    if (!confirm('Delete this user?')) return;
+    
+    const res = await fetch(`${API_BASE}/users/${userId}`, {
+        method: 'DELETE'
+    });
+    
+    const result = await res.json();
+    
+    if (result.error) {
+        alert('Error: ' + result.error);
+    } else {
+        alert('User deleted');
+        loadUsers();
     }
 }
 
