@@ -1,0 +1,211 @@
+{
+    "comment": [
+        {},
+        {},
+        {}
+    ],
+    "menyy": {
+        "@attributes": {
+            "id": "1",
+            "kategooria": "peamine",
+            "aktiivsus": "aktiivne"
+        },
+        "tooded": {
+            "toit": [
+                {
+                    "@attributes": {
+                        "id": "101",
+                        "liik": "peablokk",
+                        "hind": "15.50"
+                    },
+                    "nimetus": "Grillitud lõhe",
+                    "koostis": "Lõhe, kartul, köögiviljad",
+                    "kalorsus": "450"
+                },
+                {
+                    "@attributes": {
+                        "id": "102",
+                        "liik": "eelroog",
+                        "hind": "8.00"
+                    },
+                    "nimetus": "Caesari salat",
+                    "koostis": "Salat, kana, parmesan, kroutonid",
+                    "kalorsus": "280"
+                }
+            ],
+            "jook": [
+                {
+                    "@attributes": {
+                        "id": "201",
+                        "liik": "alkohoolne",
+                        "maht": "0.5"
+                    },
+                    "nimetus": "Valge vein",
+                    "tootja": "Villa Maria",
+                    "alkoholiProtsent": "12.5",
+                    "hind": "25.00"
+                },
+                {
+                    "@attributes": {
+                        "id": "202",
+                        "liik": "mittealkohoolne",
+                        "maht": "0.33"
+                    },
+                    "nimetus": "Coca-Cola",
+                    "tootja": "Coca-Cola Company",
+                    "alkoholiProtsent": "0",
+                    "hind": "3.50"
+                }
+            ]
+        }
+    },
+    "teenindus": {
+        "@attributes": {
+            "piirkond": "saal1",
+            "vahetus": "hommik",
+            "juhataja": "Mart Mets"
+        },
+        "lauad": {
+            "laud": [
+                {
+                    "@attributes": {
+                        "id": "1",
+                        "kohtade_arv": "4",
+                        "staatus": "vaba",
+                        "asukoht": "aken"
+                    },
+                    "reserveeritud": "false",
+                    "erinoued": "Lastega sohber"
+                },
+                {
+                    "@attributes": {
+                        "id": "2",
+                        "kohtade_arv": "2",
+                        "staatus": "broneeritud",
+                        "asukoht": "nurk"
+                    },
+                    "reserveeritud": "true",
+                    "erinoued": "Vaikne koht"
+                }
+            ]
+        },
+        "teenindajad": {
+            "teenindaja": [
+                {
+                    "@attributes": {
+                        "id": "501",
+                        "staatus": "tööl",
+                        "kogemus": "5"
+                    },
+                    "nimi": "Anna Kask",
+                    "telefon": "+372 5555 1234",
+                    "tööaeg": "08:00-16:00"
+                },
+                {
+                    "@attributes": {
+                        "id": "502",
+                        "staatus": "puhkus",
+                        "kogemus": "3"
+                    },
+                    "nimi": "Peeter Tamm",
+                    "telefon": "+372 5555 5678",
+                    "tööaeg": "16:00-24:00"
+                }
+            ]
+        }
+    },
+    "tellimused": {
+        "@attributes": {
+            "kuupaev": "2024-11-19",
+            "kokku_summa": "54.00",
+            "klient_tyyp": "kohapealne"
+        },
+        "tellimus": [
+            {
+                "@attributes": {
+                    "id": "1001",
+                    "laud_id": "1",
+                    "teenindaja_id": "501",
+                    "staatus": "kinnitatud",
+                    "prioriteet": "tavaline"
+                },
+                "tellimuse_aeg": "14:30:00",
+                "kliendi_info": {
+                    "nimi": "Jaan Tamm",
+                    "telefon": "+372 5666 7890"
+                },
+                "kaubad": {
+                    "kaup": [
+                        {
+                            "@attributes": {
+                                "toot_id": "101",
+                                "kogus": "1",
+                                "yhiku_hind": "15.50"
+                            },
+                            "nimetus": "Grillitud lõhe"
+                        },
+                        {
+                            "@attributes": {
+                                "toot_id": "201",
+                                "kogus": "1",
+                                "yhiku_hind": "25.00"
+                            },
+                            "nimetus": "Valge vein"
+                        }
+                    ]
+                },
+                "kogusumma": "40.50"
+            },
+            {
+                "@attributes": {
+                    "id": "1002",
+                    "laud_id": "2",
+                    "teenindaja_id": "501",
+                    "staatus": "ootel",
+                    "prioriteet": "kire"
+                },
+                "tellimuse_aeg": "15:45:00",
+                "kliendi_info": {
+                    "nimi": "Mari Saar",
+                    "telefon": "+372 5777 1111"
+                },
+                "kaubad": {
+                    "kaup": {
+                        "@attributes": {
+                            "toot_id": "102",
+                            "kogus": "2",
+                            "yhiku_hind": "8.00"
+                        },
+                        "nimetus": "Caesari salat"
+                    }
+                },
+                "kogusumma": "16.00"
+            },
+            {
+                "@attributes": {
+                    "id": "1003",
+                    "laud_id": "1",
+                    "teenindaja_id": "502",
+                    "staatus": "valmis",
+                    "prioriteet": "tavaline"
+                },
+                "tellimuse_aeg": "13:15:00",
+                "kliendi_info": {
+                    "nimi": "Kalle Kurg",
+                    "telefon": "+372 5888 2222"
+                },
+                "kaubad": {
+                    "kaup": {
+                        "@attributes": {
+                            "toot_id": "202",
+                            "kogus": "2",
+                            "yhiku_hind": "3.50"
+                        },
+                        "nimetus": "Coca-Cola"
+                    }
+                },
+                "kogusumma": "7.00"
+            }
+        ]
+    }
+}
