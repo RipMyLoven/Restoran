@@ -1,0 +1,169 @@
+### Restaurant Management API - Test Requests
+
+### 1. Create Restaurant
+POST https://localhost:5001/api/restaurants
+Content-Type: application/json
+
+{
+  "name": "Italian Bistro",
+  "tableCount": 15,
+  "allergyTags": "gluten,lactose,nuts,shellfish",
+  "dietTags": "vegan,vegetarian,halal,kosher"
+}
+
+###
+
+### 2. Get All Restaurants
+GET https://localhost:5001/api/restaurants
+
+###
+
+### 3. Get Restaurant by ID
+GET https://localhost:5001/api/restaurants/1
+
+###
+
+### 4. Create Menu Item
+POST https://localhost:5001/api/menuitems
+Content-Type: application/json
+
+{
+  "name": "Margherita Pizza",
+  "description": "Classic Italian pizza with tomato sauce and mozzarella",
+  "price": 12.99,
+  "category": "Main Course",
+  "allergens": "gluten,lactose",
+  "dietaryInfo": "vegetarian",
+  "restaurantId": 1,
+  "isAvailable": true
+}
+
+###
+
+### 5. Create Another Menu Item
+POST https://localhost:5001/api/menuitems
+Content-Type: application/json
+
+{
+  "name": "Caesar Salad",
+  "description": "Fresh romaine lettuce with caesar dressing",
+  "price": 8.99,
+  "category": "Appetizer",
+  "allergens": "lactose,eggs",
+  "dietaryInfo": "vegetarian",
+  "restaurantId": 1,
+  "isAvailable": true
+}
+
+###
+
+### 6. Get All Menu Items
+GET https://localhost:5001/api/menuitems
+
+###
+
+### 7. Get All Tables
+GET https://localhost:5001/api/tables
+
+###
+
+### 8. Create Order
+POST https://localhost:5001/api/orders
+Content-Type: application/json
+
+{
+  "tableId": 1,
+  "restaurantId": 1,
+  "customerName": "John Smith",
+  "specialRequirements": "No onions, extra cheese",
+  "orderItems": [
+    {
+      "menuItemId": 1,
+      "quantity": 2,
+      "priceAtOrder": 12.99,
+      "specialInstructions": "Well done"
+    },
+    {
+      "menuItemId": 2,
+      "quantity": 1,
+      "priceAtOrder": 8.99,
+      "specialInstructions": "No croutons"
+    }
+  ]
+}
+
+###
+
+### 9. Get All Orders
+GET https://localhost:5001/api/orders
+
+###
+
+### 10. Send Order to Kitchen
+POST https://localhost:5001/api/orders/1/send-to-kitchen
+
+###
+
+### 11. Get Kitchen Orders
+GET https://localhost:5001/api/orders/kitchen
+
+###
+
+### 12. Mark Order as Ready (Kitchen)
+POST https://localhost:5001/api/orders/1/mark-ready
+
+###
+
+### 13. Get Ready Orders (Waiter)
+GET https://localhost:5001/api/orders/ready
+
+###
+
+### 14. Mark Order as Served
+POST https://localhost:5001/api/orders/1/mark-served
+
+###
+
+### 15. Generate Bill
+POST https://localhost:5001/api/bills/generate/1
+
+###
+
+### 16. Get Bill by Order ID
+GET https://localhost:5001/api/bills/order/1
+
+###
+
+### 17. Pay Bill
+POST https://localhost:5001/api/bills/1/pay
+Content-Type: application/json
+
+{
+  "paymentMethod": "card"
+}
+
+###
+
+### 18. Get All Bills
+GET https://localhost:5001/api/bills
+
+###
+
+### 19. Get Order by ID
+GET https://localhost:5001/api/orders/1
+
+###
+
+### 20. Update Restaurant
+PUT https://localhost:5001/api/restaurants/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Italian Bistro Updated",
+  "tableCount": 15,
+  "allergyTags": "gluten,lactose,nuts,shellfish,soy",
+  "dietTags": "vegan,vegetarian,halal,kosher,keto"
+}
+
+###
