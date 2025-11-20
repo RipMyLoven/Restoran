@@ -1,0 +1,6 @@
+@ResBack_HostAddress = http://localhost:5110
+
+GET {{ResBack_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

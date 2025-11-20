@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<restoran xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:noNamespaceSchemaLocation="restoran_schema.xsd">
+    
+    <!-- Dimensioon 1: Menüüd ja toidud -->
+    <menyy id="1" kategooria="peamine" aktiivsus="aktiivne">
+        <tooded>
+            <toit id="101" liik="peablokk" hind="15.50">
+                <nimetus>Grillitud lõhe</nimetus>
+                <koostis>Lõhe, kartul, köögiviljad</koostis>
+                <kalorsus>450</kalorsus>
+            </toit>
+            <toit id="102" liik="eelroog" hind="8.00">
+                <nimetus>Caesari salat</nimetus>
+                <koostis>Salat, kana, parmesan, kroutonid</koostis>
+                <kalorsus>280</kalorsus>
+            </toit>
+            <jook id="201" liik="alkohoolne" maht="0.5">
+                <nimetus>Valge vein</nimetus>
+                <tootja>Villa Maria</tootja>
+                <alkoholiProtsent>12.5</alkoholiProtsent>
+                <hind>25.00</hind>
+            </jook>
+            <jook id="202" liik="mittealkohoolne" maht="0.33">
+                <nimetus>Coca-Cola</nimetus>
+                <tootja>Coca-Cola Company</tootja>
+                <alkoholiProtsent>0</alkoholiProtsent>
+                <hind>3.50</hind>
+            </jook>
+        </tooded>
+    </menyy>
+
+    <!-- Dimensioon 2: Lauad ja teenindajad -->
+    <teenindus piirkond="saal1" vahetus="hommik" juhataja="Mart Mets">
+        <lauad>
+            <laud id="1" kohtade_arv="4" staatus="vaba" asukoht="aken">
+                <reserveeritud>false</reserveeritud>
+                <erinoued>Lastega sohber</erinoued>
+            </laud>
+            <laud id="2" kohtade_arv="2" staatus="broneeritud" asukoht="nurk">
+                <reserveeritud>true</reserveeritud>
+                <erinoued>Vaikne koht</erinoued>
+            </laud>
+        </lauad>
+        <teenindajad>
+            <teenindaja id="501" staatus="tööl" kogemus="5">
+                <nimi>Anna Kask</nimi>
+                <telefon>+372 5555 1234</telefon>
+                <tööaeg>08:00-16:00</tööaeg>
+            </teenindaja>
+            <teenindaja id="502" staatus="puhkus" kogemus="3">
+                <nimi>Peeter Tamm</nimi>
+                <telefon>+372 5555 5678</telefon>
+                <tööaeg>16:00-24:00</tööaeg>
+            </teenindaja>
+        </teenindajad>
+    </teenindus>
+
+    <!-- Dimensioon 3: Tellimused ja nende staatused -->
+    <tellimused kuupaev="2024-11-19" kokku_summa="54.00" klient_tyyp="kohapealne">
+        <tellimus id="1001" laud_id="1" teenindaja_id="501" staatus="kinnitatud" prioriteet="tavaline">
+            <tellimuse_aeg>14:30:00</tellimuse_aeg>
+            <kliendi_info>
+                <nimi>Jaan Tamm</nimi>
+                <telefon>+372 5666 7890</telefon>
+            </kliendi_info>
+            <kaubad>
+                <kaup toot_id="101" kogus="1" yhiku_hind="15.50">
+                    <nimetus>Grillitud lõhe</nimetus>
+                </kaup>
+                <kaup toot_id="201" kogus="1" yhiku_hind="25.00">
+                    <nimetus>Valge vein</nimetus>
+                </kaup>
+            </kaubad>
+            <kogusumma>40.50</kogusumma>
+        </tellimus>
+        
+        <tellimus id="1002" laud_id="2" teenindaja_id="501" staatus="ootel" prioriteet="kire">
+            <tellimuse_aeg>15:45:00</tellimuse_aeg>
+            <kliendi_info>
+                <nimi>Mari Saar</nimi>
+                <telefon>+372 5777 1111</telefon>
+            </kliendi_info>
+            <kaubad>
+                <kaup toot_id="102" kogus="2" yhiku_hind="8.00">
+                    <nimetus>Caesari salat</nimetus>
+                </kaup>
+            </kaubad>
+            <kogusumma>16.00</kogusumma>
+        </tellimus>
+        
+        <tellimus id="1003" laud_id="1" teenindaja_id="502" staatus="valmis" prioriteet="tavaline">
+            <tellimuse_aeg>13:15:00</tellimuse_aeg>
+            <kliendi_info>
+                <nimi>Kalle Kurg</nimi>
+                <telefon>+372 5888 2222</telefon>
+            </kliendi_info>
+            <kaubad>
+                <kaup toot_id="202" kogus="2" yhiku_hind="3.50">
+                    <nimetus>Coca-Cola</nimetus>
+                </kaup>
+            </kaubad>
+            <kogusumma>7.00</kogusumma>
+        </tellimus>
+    </tellimused>
+    
+</restoran>
