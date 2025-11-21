@@ -1,16 +1,11 @@
 {
-    "comment": [
-        {},
-        {},
-        {}
-    ],
     "menyy": {
         "@attributes": {
             "id": "1",
             "kategooria": "peamine",
             "aktiivsus": "aktiivne"
         },
-        "tooded": {
+        "tooted": {
             "toit": [
                 {
                     "@attributes": {
@@ -31,6 +26,86 @@
                     "nimetus": "Caesari salat",
                     "koostis": "Salat, kana, parmesan, kroutonid",
                     "kalorsus": "280"
+                },
+                {
+                    "@attributes": {
+                        "id": "103",
+                        "liik": "peablokk",
+                        "hind": "18.90"
+                    },
+                    "nimetus": "Grillitud liha steik",
+                    "koostis": "Veiseliha, kartulipüree, küüslaugu kaste",
+                    "kalorsus": "620"
+                },
+                {
+                    "@attributes": {
+                        "id": "104",
+                        "liik": "eelroog",
+                        "hind": "6.50"
+                    },
+                    "nimetus": "Supp päevast",
+                    "koostis": "Köögiviljad, liha, hapukoor",
+                    "kalorsus": "180"
+                },
+                {
+                    "@attributes": {
+                        "id": "105",
+                        "liik": "magustoit",
+                        "hind": "7.00"
+                    },
+                    "nimetus": "Tiramisu",
+                    "koostis": "Mascarpone juust, kohv, kakao",
+                    "kalorsus": "320"
+                },
+                {
+                    "@attributes": {
+                        "id": "106",
+                        "liik": "peablokk",
+                        "hind": "16.50"
+                    },
+                    "nimetus": "Pasta Carbonara",
+                    "koostis": "Pasta, peekon, muna, parmesan",
+                    "kalorsus": "540"
+                },
+                {
+                    "@attributes": {
+                        "id": "107",
+                        "liik": "eelroog",
+                        "hind": "9.50"
+                    },
+                    "nimetus": "Krevetisalat",
+                    "koostis": "Krevetid, avokado, salat, sidrunimahl",
+                    "kalorsus": "220"
+                },
+                {
+                    "@attributes": {
+                        "id": "108",
+                        "liik": "peablokk",
+                        "hind": "14.00"
+                    },
+                    "nimetus": "Vegetaarne pizza",
+                    "koostis": "Tomatikaste, juust, köögiviljad",
+                    "kalorsus": "480"
+                },
+                {
+                    "@attributes": {
+                        "id": "109",
+                        "liik": "magustoit",
+                        "hind": "5.50"
+                    },
+                    "nimetus": "Šokolaadikook",
+                    "koostis": "Šokolaad, muna, või, suhkur",
+                    "kalorsus": "380"
+                },
+                {
+                    "@attributes": {
+                        "id": "110",
+                        "liik": "peablokk",
+                        "hind": "13.50"
+                    },
+                    "nimetus": "Kana filee riisiga",
+                    "koostis": "Kana, riis, köögiviljad, ürdid",
+                    "kalorsus": "420"
                 }
             ],
             "jook": [
@@ -55,6 +130,72 @@
                     "tootja": "Coca-Cola Company",
                     "alkoholiProtsent": "0",
                     "hind": "3.50"
+                },
+                {
+                    "@attributes": {
+                        "id": "203",
+                        "liik": "alkohoolne",
+                        "maht": "0.33"
+                    },
+                    "nimetus": "Eesti õlu",
+                    "tootja": "A. Le Coq",
+                    "alkoholiProtsent": "5.2",
+                    "hind": "4.50"
+                },
+                {
+                    "@attributes": {
+                        "id": "204",
+                        "liik": "mittealkohoolne",
+                        "maht": "0.25"
+                    },
+                    "nimetus": "Apelsinimahl",
+                    "tootja": "Valio",
+                    "alkoholiProtsent": "0",
+                    "hind": "2.80"
+                },
+                {
+                    "@attributes": {
+                        "id": "205",
+                        "liik": "alkohoolne",
+                        "maht": "0.75"
+                    },
+                    "nimetus": "Punane vein",
+                    "tootja": "Chianti Classico",
+                    "alkoholiProtsent": "13.5",
+                    "hind": "35.00"
+                },
+                {
+                    "@attributes": {
+                        "id": "206",
+                        "liik": "mittealkohoolne",
+                        "maht": "0.5"
+                    },
+                    "nimetus": "Mineraalvesi",
+                    "tootja": "Värska",
+                    "alkoholiProtsent": "0",
+                    "hind": "2.00"
+                },
+                {
+                    "@attributes": {
+                        "id": "207",
+                        "liik": "mittealkohoolne",
+                        "maht": "0.2"
+                    },
+                    "nimetus": "Kohv espresso",
+                    "tootja": "Paulig",
+                    "alkoholiProtsent": "0",
+                    "hind": "2.50"
+                },
+                {
+                    "@attributes": {
+                        "id": "208",
+                        "liik": "mittealkohoolne",
+                        "maht": "0.3"
+                    },
+                    "nimetus": "Tee Earl Grey",
+                    "tootja": "Lipton",
+                    "alkoholiProtsent": "0",
+                    "hind": "2.20"
                 }
             ]
         }
@@ -126,7 +267,7 @@
                     "id": "1001",
                     "laud_id": "1",
                     "teenindaja_id": "501",
-                    "staatus": "kinnitatud",
+                    "staatus": "valmis",
                     "prioriteet": "tavaline"
                 },
                 "tellimuse_aeg": "14:30:00",

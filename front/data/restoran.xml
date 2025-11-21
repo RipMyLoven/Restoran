@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <restoran xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:noNamespaceSchemaLocation="restoran_schema.xsd">
+         xsi:noNamespaceSchemaLocation="restoran.xsd">
     
-    <!-- Dimensioon 1: Menüüd ja toidud -->
     <menyy id="1" kategooria="peamine" aktiivsus="aktiivne">
-        <tooded>
+        <tooted>
             <toit id="101" liik="peablokk" hind="15.50">
                 <nimetus>Grillitud lõhe</nimetus>
                 <koostis>Lõhe, kartul, köögiviljad</koostis>
@@ -14,6 +13,46 @@
                 <nimetus>Caesari salat</nimetus>
                 <koostis>Salat, kana, parmesan, kroutonid</koostis>
                 <kalorsus>280</kalorsus>
+            </toit>
+            <toit id="103" liik="peablokk" hind="18.90">
+                <nimetus>Grillitud liha steik</nimetus>
+                <koostis>Veiseliha, kartulipüree, küüslaugu kaste</koostis>
+                <kalorsus>620</kalorsus>
+            </toit>
+            <toit id="104" liik="eelroog" hind="6.50">
+                <nimetus>Supp päevast</nimetus>
+                <koostis>Köögiviljad, liha, hapukoor</koostis>
+                <kalorsus>180</kalorsus>
+            </toit>
+            <toit id="105" liik="magustoit" hind="7.00">
+                <nimetus>Tiramisu</nimetus>
+                <koostis>Mascarpone juust, kohv, kakao</koostis>
+                <kalorsus>320</kalorsus>
+            </toit>
+            <toit id="106" liik="peablokk" hind="16.50">
+                <nimetus>Pasta Carbonara</nimetus>
+                <koostis>Pasta, peekon, muna, parmesan</koostis>
+                <kalorsus>540</kalorsus>
+            </toit>
+            <toit id="107" liik="eelroog" hind="9.50">
+                <nimetus>Krevetisalat</nimetus>
+                <koostis>Krevetid, avokado, salat, sidrunimahl</koostis>
+                <kalorsus>220</kalorsus>
+            </toit>
+            <toit id="108" liik="peablokk" hind="14.00">
+                <nimetus>Vegetaarne pizza</nimetus>
+                <koostis>Tomatikaste, juust, köögiviljad</koostis>
+                <kalorsus>480</kalorsus>
+            </toit>
+            <toit id="109" liik="magustoit" hind="5.50">
+                <nimetus>Šokolaadikook</nimetus>
+                <koostis>Šokolaad, muna, või, suhkur</koostis>
+                <kalorsus>380</kalorsus>
+            </toit>
+            <toit id="110" liik="peablokk" hind="13.50">
+                <nimetus>Kana filee riisiga</nimetus>
+                <koostis>Kana, riis, köögiviljad, ürdid</koostis>
+                <kalorsus>420</kalorsus>
             </toit>
             <jook id="201" liik="alkohoolne" maht="0.5">
                 <nimetus>Valge vein</nimetus>
@@ -27,10 +66,45 @@
                 <alkoholiProtsent>0</alkoholiProtsent>
                 <hind>3.50</hind>
             </jook>
-        </tooded>
+            <jook id="203" liik="alkohoolne" maht="0.33">
+                <nimetus>Eesti õlu</nimetus>
+                <tootja>A. Le Coq</tootja>
+                <alkoholiProtsent>5.2</alkoholiProtsent>
+                <hind>4.50</hind>
+            </jook>
+            <jook id="204" liik="mittealkohoolne" maht="0.25">
+                <nimetus>Apelsinimahl</nimetus>
+                <tootja>Valio</tootja>
+                <alkoholiProtsent>0</alkoholiProtsent>
+                <hind>2.80</hind>
+            </jook>
+            <jook id="205" liik="alkohoolne" maht="0.75">
+                <nimetus>Punane vein</nimetus>
+                <tootja>Chianti Classico</tootja>
+                <alkoholiProtsent>13.5</alkoholiProtsent>
+                <hind>35.00</hind>
+            </jook>
+            <jook id="206" liik="mittealkohoolne" maht="0.5">
+                <nimetus>Mineraalvesi</nimetus>
+                <tootja>Värska</tootja>
+                <alkoholiProtsent>0</alkoholiProtsent>
+                <hind>2.00</hind>
+            </jook>
+            <jook id="207" liik="mittealkohoolne" maht="0.2">
+                <nimetus>Kohv espresso</nimetus>
+                <tootja>Paulig</tootja>
+                <alkoholiProtsent>0</alkoholiProtsent>
+                <hind>2.50</hind>
+            </jook>
+            <jook id="208" liik="mittealkohoolne" maht="0.3">
+                <nimetus>Tee Earl Grey</nimetus>
+                <tootja>Lipton</tootja>
+                <alkoholiProtsent>0</alkoholiProtsent>
+                <hind>2.20</hind>
+            </jook>
+        </tooted>
     </menyy>
 
-    <!-- Dimensioon 2: Lauad ja teenindajad -->
     <teenindus piirkond="saal1" vahetus="hommik" juhataja="Mart Mets">
         <lauad>
             <laud id="1" kohtade_arv="4" staatus="vaba" asukoht="aken">
@@ -56,7 +130,6 @@
         </teenindajad>
     </teenindus>
 
-    <!-- Dimensioon 3: Tellimused ja nende staatused -->
     <tellimused kuupaev="2024-11-19" kokku_summa="54.00" klient_tyyp="kohapealne">
         <tellimus id="1001" laud_id="1" teenindaja_id="501" staatus="kinnitatud" prioriteet="tavaline">
             <tellimuse_aeg>14:30:00</tellimuse_aeg>
