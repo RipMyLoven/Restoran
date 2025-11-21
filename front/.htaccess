@@ -1,0 +1,7 @@
+# Enable serving of static files
+RewriteEngine Off
+
+# Serve static files directly
+<FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg)$">
+    Header set Cache-Control "max-age=86400"
+</FilesMatch>

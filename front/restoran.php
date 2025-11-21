@@ -2,65 +2,8 @@
 $xmlFile = 'data/restoran.xml';
 $jsonFile = 'data/restoran.json';
 
-// Функция для генерации единой навигации
 function generateNavigation($currentPage = '') {
     return '
-    <style>
-        .main-nav {
-            background: linear-gradient(135deg, #007cba, #005a87);
-            padding: 15px 0;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .nav-brand {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            text-decoration: none;
-            margin-right: 30px;
-        }
-        .nav-links {
-            display: flex;
-            gap: 0;
-            flex-wrap: wrap;
-        }
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            margin: 2px;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid transparent;
-        }
-        .nav-links a:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-        .nav-links a.active {
-            background: rgba(255,255,255,0.3);
-            border-color: rgba(255,255,255,0.5);
-        }
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .nav-links {
-                justify-content: center;
-            }
-        }
-    </style>
     
     <nav class="main-nav">
         <div class="nav-container">
@@ -136,278 +79,274 @@ function sortFood($xml, $sortBy = '', $sortOrder = 'asc') {
 function xmlToHtml($xmlFile) {
     $xml = simplexml_load_file($xmlFile);
     
-    $orderStatus = isset($_GET['order_status']) ? $_GET['order_status'] : '';
-    $foodSearch = isset($_GET['food_search']) ? $_GET['food_search'] : '';
-    $tableStatus = isset($_GET['table_status']) ? $_GET['table_status'] : '';
-    $sortBy = isset($_GET['sort_by']) ? $_GET['sort_by'] : '';
-    $sortOrder = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
+
     
     $html = '<!DOCTYPE html>
     <html>
     <head>
         <meta charset="UTF-8">
         <title>Restoran Data</title>
-        <style>
-            body { font-family: Arial, sans-serif; margin: 20px; }
-            table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-            th { background-color: #f2f2f2; }
-            h2 { color: #333; }
-            .menu-section { margin: 30px 0; }
-            .search-form { 
-                background: #f9f9f9; 
-                padding: 15px; 
-                border: 1px solid #ddd; 
-                border-radius: 5px; 
-                margin: 20px 0; 
-            }
-            .form-group { 
-                display: inline-block; 
-                margin-right: 15px; 
-                margin-bottom: 10px; 
-            }
-            label { font-weight: bold; margin-right: 5px; }
-            input, select { 
-                padding: 5px; 
-                border: 1px solid #ccc; 
-                border-radius: 3px; 
-            }
-            button { 
-                background: #007cba; 
-                color: white; 
-                padding: 8px 15px; 
-                border: none; 
-                border-radius: 3px; 
-                cursor: pointer; 
-            }
-            button:hover { background: #005a87; }
-            .reset-btn { background: #6c757d; }
-            .reset-btn:hover { background: #545b62; }
-        </style>
+        <link rel="stylesheet" href="css/styles.css">
     </head>
-    <body>
+    <body class="data-view">
         ' . generateNavigation('html') . '
         
         <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-            <h1>Restorani Andmed</h1>
-        
-        <div class="search-form">
-            <h3>Otsing ja sortimine</h3>
-            <form method="GET">
-                <input type="hidden" name="format" value="html">
-                
-                <div class="form-group">
-                    <label for="food_search">Toidu nimi:</label>
-                    <input type="text" id="food_search" name="food_search" 
-                           value="' . htmlspecialchars($foodSearch) . '" 
-                           placeholder="Sisesta toidu nimi...">
-                </div>
-                
-                <div class="form-group">
-                    <label for="order_status">Tellimuse staatus:</label>
-                    <select id="order_status" name="order_status">
-                        <option value="">Kõik</option>
-                        <option value="ootel"' . ($orderStatus == 'ootel' ? ' selected' : '') . '>Ootel</option>
-                        <option value="kinnitatud"' . ($orderStatus == 'kinnitatud' ? ' selected' : '') . '>Kinnitatud</option>
-                        <option value="valmis"' . ($orderStatus == 'valmis' ? ' selected' : '') . '>Valmis</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="table_status">Laua staatus:</label>
-                    <select id="table_status" name="table_status">
-                        <option value="">Kõik</option>
-                        <option value="vaba"' . ($tableStatus == 'vaba' ? ' selected' : '') . '>Vaba</option>
-                        <option value="reserveeritud"' . ($tableStatus == 'reserveeritud' ? ' selected' : '') . '>Reserveeritud</option>
-                        <option value="hõivatud"' . ($tableStatus == 'hõivatud' ? ' selected' : '') . '>Hõivatud</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="sort_by">Sortimise alus:</label>
-                    <select id="sort_by" name="sort_by">
-                        <option value="">Tavaline</option>
-                        <option value="hind"' . ($sortBy == 'hind' ? ' selected' : '') . '>Hind</option>
-                        <option value="kalorsus"' . ($sortBy == 'kalorsus' ? ' selected' : '') . '>Kalorid</option>
-                        <option value="nimetus"' . ($sortBy == 'nimetus' ? ' selected' : '') . '>Nimi</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="sort_order">Järjekord:</label>
-                    <select id="sort_order" name="sort_order">
-                        <option value="asc"' . ($sortOrder == 'asc' ? ' selected' : '') . '>Kasvav</option>
-                        <option value="desc"' . ($sortOrder == 'desc' ? ' selected' : '') . '>Kahanev</option>
-                    </select>
-                </div>
-                
-                <button type="submit">Otsi</button>
-                <button type="button" class="reset-btn" onclick="window.location.href=\'?format=html\'">Lähtesta</button>
-            </form>
-        </div>
-        
-        <script>
-            document.querySelectorAll("select").forEach(function(select) {
-                select.addEventListener("change", function() {
-                    if (this.value !== "") {
-                        this.form.submit();
-                    }
-                });
-            });
-            
-            document.querySelectorAll("table tr").forEach(function(row) {
-                row.addEventListener("mouseenter", function() {
-                    this.style.backgroundColor = "#f5f5f5";
-                });
-                row.addEventListener("mouseleave", function() {
-                    this.style.backgroundColor = "";
-                });
-            });
-        </script>';
-    
-    $filteredFoods = searchFoodByName($xml, $foodSearch);
-    if (!empty($sortBy)) {
-        $tempXml = new SimpleXMLElement('<root><menyy><tooted></tooted></menyy></root>');
-        foreach ($filteredFoods as $food) {
-            $tempFood = $tempXml->menyy->tooted->addChild('toit');
-            foreach ($food->attributes() as $key => $value) {
-                $tempFood->addAttribute($key, $value);
-            }
-            foreach ($food->children() as $child) {
-                $tempFood->addChild($child->getName(), (string)$child);
-            }
-        }
-        $sortedFoods = sortFood($tempXml, $sortBy, $sortOrder);
-    } else {
-        $sortedFoods = $filteredFoods;
-    }
+            <h1>Restorani Andmed</h1>';
+
     
     $html .= '<div class="menu-section">
-        <h2>Toidud (' . count($sortedFoods) . ' tulemust)</h2>
-        <table>
-            <tr>
-            <th>Nimetus</th>
-            <th>Liik</th>
-            <th>Hind</th>
-            <th>Koostis</th>
-            <th>Kalorid</th></tr>';
+        <h2>Toidud</h2>
+        
+        <div class="table-controls">
+            <input type="text" class="search-input" id="food-search" placeholder="Otsi toitu..." onkeyup="filterTable(\'food-table\', this.value)">
+        </div>
+        
+        <table id="food-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(\'food-table\', \'0\')">Nimetus <span class="sort-indicator"></span></th>
+                    <th onclick="sortTable(\'food-table\', \'1\')">Liik <span class="sort-indicator"></span></th>
+                    <th onclick="sortTable(\'food-table\', \'2\')">Hind <span class="sort-indicator"></span></th>
+                    <th>Koostis</th>
+                    <th onclick="sortTable(\'food-table\', \'4\')">Kalorid <span class="sort-indicator"></span></th>
+                </tr>
+            </thead>
+            <tbody>';
 
-    foreach ($sortedFoods as $toit) {
+    foreach ($xml->menyy->tooted->toit as $toit) {
         $html .= '<tr>
-            <td>' . (string)$toit->nimetus . '</td>
-            <td>' . (string)$toit['liik'] . '</td>
-            <td>€' . (string)$toit['hind'] . '</td>
-            <td>' . (string)$toit->koostis . '</td>
-            <td>' . (string)$toit->kalorsus . '</td>
+            <td>' . htmlspecialchars((string)$toit->nimetus) . '</td>
+            <td>' . htmlspecialchars((string)$toit['liik']) . '</td>
+            <td data-sort="' . (float)$toit['hind'] . '">€' . htmlspecialchars((string)$toit['hind']) . '</td>
+            <td>' . htmlspecialchars((string)$toit->koostis) . '</td>
+            <td data-sort="' . (int)$toit->kalorsus . '">' . htmlspecialchars((string)$toit->kalorsus) . '</td>
         </tr>';
     }
-    $html .= '</table></div>';
+    $html .= '</tbody></table></div>';
     
     $html .= '<div class="menu-section">
         <h2>Joogid</h2>
-        <table>
-            <tr>
-            <th>Nimetus</th>
-            <th>Liik</th>
-            <th>Maht</th>
-            <th>Tootja</th>
-            <th>Alkohol %</th>
-            <th>Hind</th>
-            </tr>';
+        
+        <div class="table-controls">
+            <input type="text" class="search-input" id="drinks-search" placeholder="Otsi jooki..." onkeyup="filterTable(\'drinks-table\', this.value)">
+        </div>
+        
+        <table id="drinks-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(\'drinks-table\', \'0\')">Nimetus <span class="sort-indicator"></span></th>
+                    <th onclick="sortTable(\'drinks-table\', \'1\')">Liik <span class="sort-indicator"></span></th>
+                    <th onclick="sortTable(\'drinks-table\', \'2\')">Maht <span class="sort-indicator"></span></th>
+                    <th>Tootja</th>
+                    <th>Alkohol %</th>
+                    <th onclick="sortTable(\'drinks-table\', \'5\')">Hind <span class="sort-indicator"></span></th>
+                </tr>
+            </thead>
+            <tbody>';
 
     foreach ($xml->menyy->tooted->jook as $jook) {
         $html .= '<tr>
-            <td>' . (string)$jook->nimetus . '</td>
-            <td>' . (string)$jook['liik'] . '</td>
-            <td>' . (string)$jook['maht'] . 'L</td>
-            <td>' . (string)$jook->tootja . '</td>
-            <td>' . (string)$jook->alkoholiProtsent . '</td>
-            <td>€' . (string)$jook->hind . '</td>
+            <td>' . htmlspecialchars((string)$jook->nimetus) . '</td>
+            <td>' . htmlspecialchars((string)$jook['liik']) . '</td>
+            <td data-sort="' . (float)$jook['maht'] . '">' . htmlspecialchars((string)$jook['maht']) . 'L</td>
+            <td>' . htmlspecialchars((string)$jook->tootja) . '</td>
+            <td>' . htmlspecialchars((string)$jook->alkoholiProtsent) . '</td>
+            <td data-sort="' . (float)$jook->hind . '">€' . htmlspecialchars((string)$jook->hind) . '</td>
         </tr>';
     }
-    $html .= '</table></div>';
+    $html .= '</tbody></table></div>';
     
     $html .= '<div class="menu-section">
-        <h2>Teenindus</h2>';
+        <h2>Teenindus</h2>
+        
+        <h4>Lauad</h4>
+        <table id="tables-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(\'tables-table\', \'0\')">Kohtade arv <span class="sort-indicator"></span></th>
+                    <th onclick="sortTable(\'tables-table\', \'1\')">Staatus <span class="sort-indicator"></span></th>
+                    <th onclick="sortTable(\'tables-table\', \'2\')">Asukoht <span class="sort-indicator"></span></th>
+                    <th>Reserveeritud</th>
+                    <th>Erinoued</th>
+                </tr>
+            </thead>
+            <tbody>';
 
-    $filteredTables = searchTablesByStatus($xml, $tableStatus);
-    
-    $html .= '<h4>Lauad (' . count($filteredTables) . ' tulemust)</h4>
-        <table>
-            <tr>
-            <th>Kohtade arv</th>
-            <th>Staatus</th>
-            <th>Asukoht</th>
-            <th>Reserveeritud</th>
-            <th>Erinoued</th></tr>';
-
-    foreach ($filteredTables as $laud) {
+    foreach ($xml->teenindus->lauad->laud as $laud) {
         $html .= '<tr>
-            <td>' . (string)$laud['kohtade_arv'] . '</td>
-            <td>' . (string)$laud['staatus'] . '</td>
-            <td>' . (string)$laud['asukoht'] . '</td>
-            <td>' . (string)$laud->reserveeritud . '</td>
-            <td>' . (string)$laud->erinoued . '</td>
+            <td data-sort="' . (int)$laud['kohtade_arv'] . '">' . htmlspecialchars((string)$laud['kohtade_arv']) . '</td>
+            <td>' . htmlspecialchars((string)$laud['staatus']) . '</td>
+            <td>' . htmlspecialchars((string)$laud['asukoht']) . '</td>
+            <td>' . htmlspecialchars((string)$laud->reserveeritud) . '</td>
+            <td>' . htmlspecialchars((string)$laud->erinoued) . '</td>
         </tr>';
     }
-    $html .= '</table>';
+    $html .= '</tbody></table>
     
-    $html .= '<h4>Teenindajad</h4>
-        <table>
-            <tr>
-            <th>Nimi</th>
-            <th>Telefon</th>
-            <th>Staatus</th>
-            <th>Kogemus</th>
-            <th>Tööaeg</th></tr>';
+        <h4>Teenindajad</h4>
+        
+
+        
+        <table id="staff-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(\'staff-table\', \'0\')">Nimi <span class="sort-indicator"></span></th>
+                    <th>Telefon</th>
+                    <th onclick="sortTable(\'staff-table\', \'2\')">Staatus <span class="sort-indicator"></span></th>
+                    <th onclick="sortTable(\'staff-table\', \'3\')">Kogemus <span class="sort-indicator"></span></th>
+                    <th>Tööaeg</th>
+                </tr>
+            </thead>
+            <tbody>';
 
     foreach ($xml->teenindus->teenindajad->teenindaja as $teenindaja) {
         $html .= '<tr>
-            <td>' . (string)$teenindaja->nimi . '</td>
-            <td>' . (string)$teenindaja->telefon . '</td>
-            <td>' . (string)$teenindaja['staatus'] . '</td>
-            <td>' . (string)$teenindaja['kogemus'] . ' aastad</td>
-            <td>' . (string)$teenindaja->tööaeg . '</td>
+            <td>' . htmlspecialchars((string)$teenindaja->nimi) . '</td>
+            <td>' . htmlspecialchars((string)$teenindaja->telefon) . '</td>
+            <td>' . htmlspecialchars((string)$teenindaja['staatus']) . '</td>
+            <td data-sort="' . (int)$teenindaja['kogemus'] . '">' . htmlspecialchars((string)$teenindaja['kogemus']) . ' aastad</td>
+            <td>' . htmlspecialchars((string)$teenindaja->tööaeg) . '</td>
         </tr>';
     }
-    $html .= '</table></div>';
+    $html .= '</tbody></table></div>';
     
-    $filteredOrders = searchOrdersByStatus($xml, $orderStatus);
-    
-    $html .= '<div class="menu-section">
-        <h2>Tellimused (' . count($filteredOrders) . ' tulemust)</h2>
-        <table>
-            <tr>
-            <th>Laud</th>
-            <th>Teenindaja</th>
-            <th>Klient</th>
-            <th>Telefon</th>
-            <th>Aeg</th>
-            <th>Staatus</th>
-            <th>Prioriteet</th>
-            <th>Summa</th>
-            </tr>';
+    $html .= '
+    <div class="menu-section">
+        <h2>Tellimused</h2>
+        
 
-    foreach ($filteredOrders as $tellimus) {
+        
+        <table id="orders-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(\'orders-table\', \'0\')">Laud <span class="sort-indicator"></span></th>
+                    <th>Teenindaja</th>
+                    <th onclick="sortTable(\'orders-table\', \'2\')">Klient <span class="sort-indicator"></span></th>
+                    <th>Telefon</th>
+                    <th onclick="sortTable(\'orders-table\', \'4\')">Aeg <span class="sort-indicator"></span></th>
+                    <th onclick="sortTable(\'orders-table\', \'5\')">Staatus <span class="sort-indicator"></span></th>
+                    <th>Prioriteet</th>
+                    <th onclick="sortTable(\'orders-table\', \'7\')">Summa <span class="sort-indicator"></span></th>
+                </tr>
+            </thead>
+            <tbody>';
+
+    foreach ($xml->tellimused->tellimus as $tellimus) {
         $html .= '<tr>
-            <td>' . (string)$tellimus['laud_id'] . '</td>
-            <td>' . (string)$tellimus['teenindaja_id'] . '</td>
-            <td>' . (string)$tellimus->kliendi_info->nimi . '</td>
-            <td>' . (string)$tellimus->kliendi_info->telefon . '</td>
-            <td>' . (string)$tellimus->tellimuse_aeg . '</td>
-            <td><strong>' . (string)$tellimus['staatus'] . '</strong></td>
-            <td>' . (string)$tellimus['prioriteet'] . '</td>
-            <td>€' . (string)$tellimus->kogusumma . '</td>
+            <td data-sort="' . (int)$tellimus['laud_id'] . '">' . htmlspecialchars((string)$tellimus['laud_id']) . '</td>
+            <td>' . htmlspecialchars((string)$tellimus['teenindaja_id']) . '</td>
+            <td>' . htmlspecialchars((string)$tellimus->kliendi_info->nimi) . '</td>
+            <td>' . htmlspecialchars((string)$tellimus->kliendi_info->telefon) . '</td>
+            <td>' . htmlspecialchars((string)$tellimus->tellimuse_aeg) . '</td>
+            <td><strong>' . htmlspecialchars((string)$tellimus['staatus']) . '</strong></td>
+            <td>' . htmlspecialchars((string)$tellimus['prioriteet']) . '</td>
+            <td data-sort="' . (float)$tellimus->kogusumma . '">€' . htmlspecialchars((string)$tellimus->kogusumma) . '</td>
         </tr>';
     }
-    $html .= '</table></div>';
+    $html .= '</tbody></table></div>';
     
-    $html .= '    </div>
+    $html .= '
+        </div>
+    <script src="/script.js"></script>
+    <script>
+        function filterTable(tableId, searchValue) {
+            console.log("filterTable called:", tableId, searchValue);
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector("tbody");
+            const rows = tbody.querySelectorAll("tr");
+            
+            searchValue = searchValue.toLowerCase();
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchValue)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+        
+        const tableSortState = {};
+        
+        function sortTable(tableId, columnIndex) {
+            console.log("sortTable called:", tableId, columnIndex);
+            sortTableByHeader(tableId, parseInt(columnIndex));
+        }
+        
+        function sortTableByHeader(tableId, columnIndex) {
+            console.log("sortTableByHeader called:", tableId, columnIndex);
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector("tbody");
+            const rows = Array.from(tbody.querySelectorAll("tr"));
+            
+            if (!tableSortState[tableId]) {
+                tableSortState[tableId] = {};
+            }
+            
+            const currentSort = tableSortState[tableId][columnIndex];
+            const isDesc = currentSort === "asc";
+            tableSortState[tableId][columnIndex] = isDesc ? "desc" : "asc";
+            
+            table.querySelectorAll(".sort-indicator").forEach(indicator => {
+                indicator.textContent = "";
+            });
+            
+            const currentHeader = table.querySelector(`thead tr th:nth-child(${columnIndex + 1}) .sort-indicator`);
+            if (currentHeader) {
+                currentHeader.textContent = isDesc ? " ↓" : " ↑";
+            }
+            
+            rows.sort((a, b) => {
+                let aValue = a.cells[columnIndex].textContent.trim();
+                let bValue = b.cells[columnIndex].textContent.trim();
+                
+                const aSort = a.cells[columnIndex].getAttribute("data-sort");
+                const bSort = b.cells[columnIndex].getAttribute("data-sort");
+                
+                if (aSort && bSort) {
+                    aValue = parseFloat(aSort);
+                    bValue = parseFloat(bSort);
+                } else {
+                    const aClean = aValue.replace(/[€L,\\s]/g, "");
+                    const bClean = bValue.replace(/[€L,\\s]/g, "");
+                    
+                    const aNum = parseFloat(aClean);
+                    const bNum = parseFloat(bClean);
+                    
+                    if (!isNaN(aNum) && !isNaN(bNum)) {
+                        aValue = aNum;
+                        bValue = bNum;
+                    }
+                }
+                
+                let result;
+                if (typeof aValue === "number" && typeof bValue === "number") {
+                    result = aValue - bValue;
+                } else {
+                    result = aValue.toString().localeCompare(bValue.toString(), "et");
+                }
+                
+                return isDesc ? -result : result;
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("DOM loaded, setting up tables...");
+            document.querySelectorAll("th[onclick]").forEach(th => {
+                console.log("Found sortable header:", th);
+                th.style.cursor = "pointer";
+                th.title = "Kliki sortimiseks";
+            });
+        });
+    </script>
     </body></html>';
     return $html;
 }
 
-// Функция для загрузки JSON данных
 function loadJsonData($jsonFile) {
     if (!file_exists($jsonFile)) {
         return false;
@@ -416,20 +355,17 @@ function loadJsonData($jsonFile) {
     return json_decode($jsonContent, true);
 }
 
-// Функция для сохранения JSON данных
 function saveJsonData($jsonFile, $data) {
     $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     return file_put_contents($jsonFile, $json) !== false;
 }
 
-// Функция для добавления новой еды в JSON
 function addFoodToJson($jsonFile, $foodData) {
     $data = loadJsonData($jsonFile);
     if (!$data) {
         return false;
     }
     
-    // Генерируем новый ID
     $maxId = 100;
     foreach ($data['menyy']['tooted']['toit'] as $toit) {
         $currentId = (int)$toit['@attributes']['id'];
@@ -439,7 +375,6 @@ function addFoodToJson($jsonFile, $foodData) {
     }
     $newId = $maxId + 1;
     
-    // Создаем новый элемент еды
     $newFood = [
         '@attributes' => [
             'id' => (string)$newId,
@@ -451,20 +386,17 @@ function addFoodToJson($jsonFile, $foodData) {
         'kalorsus' => $foodData['kalorsus']
     ];
     
-    // Добавляем в массив
     $data['menyy']['tooted']['toit'][] = $newFood;
     
     return saveJsonData($jsonFile, $data);
 }
 
-// Функция для добавления нового заказа в JSON
 function addOrderToJson($jsonFile, $orderData) {
     $data = loadJsonData($jsonFile);
     if (!$data) {
         return false;
     }
     
-    // Генерируем новый ID заказа
     $maxId = 1000;
     foreach ($data['tellimused']['tellimus'] as $tellimus) {
         $currentId = (int)$tellimus['@attributes']['id'];
@@ -474,7 +406,6 @@ function addOrderToJson($jsonFile, $orderData) {
     }
     $newId = $maxId + 1;
     
-    // Создаем новый заказ
     $newOrder = [
         '@attributes' => [
             'id' => (string)$newId,
@@ -491,20 +422,17 @@ function addOrderToJson($jsonFile, $orderData) {
         'kogusumma' => $orderData['kogusumma']
     ];
     
-    // Добавляем в массив
     $data['tellimused']['tellimus'][] = $newOrder;
     
     return saveJsonData($jsonFile, $data);
 }
 
-// Функция для обновления статуса заказа в JSON
 function updateOrderStatus($jsonFile, $orderId, $newStatus) {
     $data = loadJsonData($jsonFile);
     if (!$data) {
         return false;
     }
     
-    // Ищем заказ по ID
     for ($i = 0; $i < count($data['tellimused']['tellimus']); $i++) {
         if ($data['tellimused']['tellimus'][$i]['@attributes']['id'] == $orderId) {
             $data['tellimused']['tellimus'][$i]['@attributes']['staatus'] = $newStatus;
@@ -521,7 +449,6 @@ function xmlToJson($xmlFile, $jsonFile) {
         return false;
     }
     
-    // Улучшенная конвертация XML в JSON с правильной структурой
     function xmlToArray($xmlObject, $out = []) {
         foreach ((array)$xmlObject as $index => $node) {
             $out[$index] = (is_object($node) || is_array($node)) ? xmlToArray($node) : $node;
@@ -535,13 +462,11 @@ function xmlToJson($xmlFile, $jsonFile) {
     return $json;
 }
 
-// Автоматическое перенаправление на HTML страницу если нет параметров
 if (empty($_GET) && empty($_POST)) {
     header('Location: ?format=html');
     exit;
 }
 
-// Обработка POST запросов для добавления данных
 $message = '';
 $messageType = '';
 
@@ -558,7 +483,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ];
                 
                 if (addFoodToJson($jsonFile, $foodData)) {
-                    // Обновляем XML файл из JSON (синхронизация)
                     xmlToJson($xmlFile, $jsonFile);
                     $message = 'Toit edukalt lisatud!';
                     $messageType = 'success';
@@ -617,58 +541,14 @@ if (isset($_GET['format']) && $_GET['format'] == 'json') {
 }
 
 if (isset($_GET['page']) && $_GET['page'] == 'manage') {
-    // Страница управления данными
     echo '<!DOCTYPE html>
     <html>
     <head>
         <meta charset="UTF-8">
         <title>Andmete haldamine</title>
-        <style>
-            body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
-            .container { max-width: 1200px; margin: 0 auto; }
-            .card { 
-                background: white; 
-                padding: 20px; 
-                margin: 20px 0; 
-                border-radius: 8px; 
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-            }
-            .form-group { margin-bottom: 15px; }
-            label { display: block; margin-bottom: 5px; font-weight: bold; }
-            input, select, textarea { 
-                width: 100%; 
-                padding: 8px; 
-                border: 1px solid #ddd; 
-                border-radius: 4px; 
-                box-sizing: border-box; 
-            }
-            button { 
-                background: #007cba; 
-                color: white; 
-                padding: 10px 20px; 
-                border: none; 
-                border-radius: 4px; 
-                cursor: pointer; 
-                margin-right: 10px;
-            }
-            button:hover { background: #005a87; }
-            .success { color: green; padding: 10px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; }
-            .error { color: red; padding: 10px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; }
-            .nav { margin-bottom: 20px; }
-            .nav a { 
-                display: inline-block; 
-                padding: 10px 15px; 
-                margin-right: 10px; 
-                background: #6c757d; 
-                color: white; 
-                text-decoration: none; 
-                border-radius: 4px; 
-            }
-            .nav a:hover { background: #545b62; }
-            .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        </style>
+        <link rel="stylesheet" href="css/styles.css">
     </head>
-    <body>
+    <body class="manage-view">
         ' . generateNavigation('manage') . '
         
         <div class="container">
@@ -777,7 +657,6 @@ if (isset($_GET['page']) && $_GET['page'] == 'manage') {
                 </div>
             </div>';
     
-    // Форма для обновления статуса заказа
     $jsonData = loadJsonData($jsonFile);
     if ($jsonData && isset($jsonData['tellimused']['tellimus'])) {
         echo '<div class="card">
@@ -831,46 +710,7 @@ echo '<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <title>Restoran - Pealeht</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; background: #f8f9fa; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .hero { 
-            background: linear-gradient(135deg, #007cba, #005a87); 
-            color: white; 
-            padding: 60px 0; 
-            text-align: center; 
-            margin-bottom: 40px;
-        }
-        .hero h1 { font-size: 3em; margin: 0 0 20px 0; }
-        .hero p { font-size: 1.2em; margin: 0; opacity: 0.9; }
-        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .card { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-        .card:hover { transform: translateY(-5px); }
-        .card-icon { font-size: 3em; margin-bottom: 20px; }
-        .card h3 { color: #007cba; margin-bottom: 15px; }
-        .card p { color: #666; line-height: 1.6; margin-bottom: 25px; }
-        .btn { 
-            display: inline-block; 
-            padding: 12px 24px; 
-            background: #007cba; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 6px; 
-            transition: background 0.3s ease;
-        }
-        .btn:hover { background: #005a87; }
-        .btn-success { background: #28a745; }
-        .btn-success:hover { background: #218838; }
-        .btn-danger { background: #dc3545; }
-        .btn-danger:hover { background: #c82333; }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     ' . generateNavigation('home') . '
