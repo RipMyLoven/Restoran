@@ -1,17 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Restoran.Data;
 using Restoran.Models;
+using Restoran.DTOs;
 
 namespace Restoran.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/menu")]
+    [Authorize]
     public class MenuItemsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -21,16 +19,36 @@ namespace Restoran.Controllers
             _context = context;
         }
 
-        // GET: api/MenuItems
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MenuItem>>> GetMenuItems()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MenuItemDto>> GetMenuItem(int id)
         {
-            return await _context.MenuItems.ToListAsync();
+            var menuItem = await _context.MenuItems
+                .Where(m => m.Id == id)
+                .Select(m => new MenuItemDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Description = m.Description,
+                    Price = m.Price,
+                    Category = m.Category,
+                    AllergyInfo = m.Allergens,
+                    DietInfo = m.DietaryInfo,
+                    IsAvailable = m.IsAvailable,
+                    RestaurantId = m.RestaurantId,
+                    CreatedAt = DateTime.Now // Since we don't have CreatedAt in existing model
+                }).FirstOrDefaultAsync();
+
+            if (menuItem == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(menuItem);
         }
 
-        // GET: api/MenuItems/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MenuItem>> GetMenuItem(int id)
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> UpdateMenuItem(int id, UpdateMenuItemDto updateMenuItemDto)
         {
             var menuItem = await _context.MenuItems.FindAsync(id);
 
@@ -39,20 +57,21 @@ namespace Restoran.Controllers
                 return NotFound();
             }
 
-            return menuItem;
-        }
-
-        // PUT: api/MenuItems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMenuItem(int id, MenuItem menuItem)
-        {
-            if (id != menuItem.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(menuItem).State = EntityState.Modified;
+            // Update fields if provided
+            if (updateMenuItemDto.Name != null)
+                menuItem.Name = updateMenuItemDto.Name;
+            if (updateMenuItemDto.Description != null)
+                menuItem.Description = updateMenuItemDto.Description;
+            if (updateMenuItemDto.Price.HasValue)
+                menuItem.Price = updateMenuItemDto.Price.Value;
+            if (updateMenuItemDto.Category != null)
+                menuItem.Category = updateMenuItemDto.Category;
+            if (updateMenuItemDto.AllergyInfo != null)
+                menuItem.Allergens = updateMenuItemDto.AllergyInfo;
+            if (updateMenuItemDto.DietInfo != null)
+                menuItem.DietaryInfo = updateMenuItemDto.DietInfo;
+            if (updateMenuItemDto.IsAvailable.HasValue)
+                menuItem.IsAvailable = updateMenuItemDto.IsAvailable.Value;
 
             try
             {
@@ -64,28 +83,14 @@ namespace Restoran.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
         }
 
-        // POST: api/MenuItems
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<MenuItem>> PostMenuItem(MenuItem menuItem)
-        {
-            _context.MenuItems.Add(menuItem);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetMenuItem", new { id = menuItem.Id }, menuItem);
-        }
-
-        // DELETE: api/MenuItems/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteMenuItem(int id)
         {
             var menuItem = await _context.MenuItems.FindAsync(id);
@@ -103,6 +108,85 @@ namespace Restoran.Controllers
         private bool MenuItemExists(int id)
         {
             return _context.MenuItems.Any(e => e.Id == id);
+        }
+    }
+
+    // Add this controller for restaurant-specific menu operations
+    [ApiController]
+    [Route("api/restaurants/{restaurantId}/menu")]
+    [Authorize]
+    public class RestaurantMenuController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+
+        public RestaurantMenuController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetRestaurantMenu(int restaurantId)
+        {
+            var menuItems = await _context.MenuItems
+                .Where(m => m.RestaurantId == restaurantId)
+                .Select(m => new MenuItemDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Description = m.Description,
+                    Price = m.Price,
+                    Category = m.Category,
+                    AllergyInfo = m.Allergens,
+                    DietInfo = m.DietaryInfo,
+                    IsAvailable = m.IsAvailable,
+                    RestaurantId = m.RestaurantId,
+                    CreatedAt = DateTime.Now
+                }).ToListAsync();
+
+            return Ok(menuItems);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<ActionResult<MenuItemDto>> CreateMenuItem(int restaurantId, CreateMenuItemDto createMenuItemDto)
+        {
+            // Check if restaurant exists
+            var restaurant = await _context.Restaurants.FindAsync(restaurantId);
+            if (restaurant == null)
+            {
+                return BadRequest("Restaurant not found");
+            }
+
+            var menuItem = new MenuItem
+            {
+                Name = createMenuItemDto.Name,
+                Description = createMenuItemDto.Description,
+                Price = createMenuItemDto.Price,
+                Category = createMenuItemDto.Category,
+                Allergens = createMenuItemDto.AllergyInfo,
+                DietaryInfo = createMenuItemDto.DietInfo,
+                RestaurantId = restaurantId,
+                IsAvailable = createMenuItemDto.IsAvailable
+            };
+
+            _context.MenuItems.Add(menuItem);
+            await _context.SaveChangesAsync();
+
+            var menuItemDto = new MenuItemDto
+            {
+                Id = menuItem.Id,
+                Name = menuItem.Name,
+                Description = menuItem.Description,
+                Price = menuItem.Price,
+                Category = menuItem.Category,
+                AllergyInfo = menuItem.Allergens,
+                DietInfo = menuItem.DietaryInfo,
+                IsAvailable = menuItem.IsAvailable,
+                RestaurantId = menuItem.RestaurantId,
+                CreatedAt = DateTime.Now
+            };
+
+            return CreatedAtAction("GetMenuItem", "MenuItems", new { id = menuItem.Id }, menuItemDto);
         }
     }
 }

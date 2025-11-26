@@ -1,17 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Restoran.Data;
 using Restoran.Models;
+using Restoran.DTOs;
 
 namespace Restoran.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
     public class TablesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -21,16 +19,32 @@ namespace Restoran.Controllers
             _context = context;
         }
 
-        // GET: api/Tables
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Table>>> GetTables()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TableDto>> GetTable(int id)
         {
-            return await _context.Tables.ToListAsync();
+            var table = await _context.Tables
+                .Where(t => t.Id == id)
+                .Select(t => new TableDto
+                {
+                    Id = t.Id,
+                    Number = t.TableNumber,
+                    Seats = t.Capacity,
+                    IsAvailable = t.Status == TableStatus.Available,
+                    RestaurantId = t.RestaurantId,
+                    CreatedAt = DateTime.Now // Since we don't have CreatedAt in existing model
+                }).FirstOrDefaultAsync();
+
+            if (table == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(table);
         }
 
-        // GET: api/Tables/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Table>> GetTable(int id)
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> UpdateTable(int id, UpdateTableDto updateTableDto)
         {
             var table = await _context.Tables.FindAsync(id);
 
@@ -39,20 +53,13 @@ namespace Restoran.Controllers
                 return NotFound();
             }
 
-            return table;
-        }
-
-        // PUT: api/Tables/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTable(int id, Table table)
-        {
-            if (id != table.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(table).State = EntityState.Modified;
+            // Update fields if provided
+            if (updateTableDto.Number.HasValue)
+                table.TableNumber = updateTableDto.Number.Value;
+            if (updateTableDto.Seats.HasValue)
+                table.Capacity = updateTableDto.Seats.Value;
+            if (updateTableDto.IsAvailable.HasValue)
+                table.Status = updateTableDto.IsAvailable.Value ? TableStatus.Available : TableStatus.Occupied;
 
             try
             {
@@ -64,28 +71,14 @@ namespace Restoran.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
         }
 
-        // POST: api/Tables
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Table>> PostTable(Table table)
-        {
-            _context.Tables.Add(table);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTable", new { id = table.Id }, table);
-        }
-
-        // DELETE: api/Tables/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteTable(int id)
         {
             var table = await _context.Tables.FindAsync(id);
@@ -103,6 +96,73 @@ namespace Restoran.Controllers
         private bool TableExists(int id)
         {
             return _context.Tables.Any(e => e.Id == id);
+        }
+    }
+
+    // Add this controller for restaurant-specific table operations
+    [ApiController]
+    [Route("api/restaurants/{restaurantId}/tables")]
+    [Authorize]
+    public class RestaurantTablesController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+
+        public RestaurantTablesController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TableDto>>> GetRestaurantTables(int restaurantId)
+        {
+            var tables = await _context.Tables
+                .Where(t => t.RestaurantId == restaurantId)
+                .Select(t => new TableDto
+                {
+                    Id = t.Id,
+                    Number = t.TableNumber,
+                    Seats = t.Capacity,
+                    IsAvailable = t.Status == TableStatus.Available,
+                    RestaurantId = t.RestaurantId,
+                    CreatedAt = DateTime.Now
+                }).ToListAsync();
+
+            return Ok(tables);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<ActionResult<TableDto>> CreateTable(int restaurantId, CreateTableDto createTableDto)
+        {
+            // Check if restaurant exists
+            var restaurant = await _context.Restaurants.FindAsync(restaurantId);
+            if (restaurant == null)
+            {
+                return BadRequest("Restaurant not found");
+            }
+
+            var table = new Table
+            {
+                TableNumber = createTableDto.Number,
+                Capacity = createTableDto.Seats,
+                RestaurantId = restaurantId,
+                Status = createTableDto.IsAvailable ? TableStatus.Available : TableStatus.Occupied
+            };
+
+            _context.Tables.Add(table);
+            await _context.SaveChangesAsync();
+
+            var tableDto = new TableDto
+            {
+                Id = table.Id,
+                Number = table.TableNumber,
+                Seats = table.Capacity,
+                IsAvailable = table.Status == TableStatus.Available,
+                RestaurantId = table.RestaurantId,
+                CreatedAt = DateTime.Now
+            };
+
+            return CreatedAtAction("GetTable", "Tables", new { id = table.Id }, tableDto);
         }
     }
 }

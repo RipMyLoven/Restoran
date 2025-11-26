@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Restoran.Data;
 using Restoran.Models;
+using Restoran.DTOs;
+using static Restoran.DTOs.StatisticsDto;
 
 namespace Restoran.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/stats")]
+    [Authorize(Roles = "Admin,Manager")]
     public class StatisticsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -16,151 +20,139 @@ namespace Restoran.Controllers
             _context = context;
         }
 
-        // GET: api/Statistics/orders/archived
-        [HttpGet("orders/archived")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetArchivedOrders()
+        [HttpGet("orders")]
+        public async Task<ActionResult<OrderStatistics>> GetOrderStatistics(
+            [FromQuery] int? restaurantId = null,
+            [FromQuery] DateTime? from = null,
+            [FromQuery] DateTime? to = null)
         {
-            return await _context.Orders
-                .Include(o => o.Table)
-                .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.MenuItem)
-                .Include(o => o.Bill)
-                .Where(o => o.Status == OrderStatus.Completed || o.Status == OrderStatus.Cancelled)
-                .OrderByDescending(o => o.CompletedAt)
-                .ToListAsync();
-        }
+            var query = _context.Orders.AsQueryable();
 
-        // GET: api/Statistics/orders/by-date
-        [HttpGet("orders/by-date")]
-        public async Task<ActionResult<object>> GetOrdersByDate([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
-        {
-            var orders = await _context.Orders
+            if (restaurantId.HasValue)
+            {
+                query = query.Where(o => o.RestaurantId == restaurantId.Value);
+            }
+
+            if (from.HasValue)
+            {
+                query = query.Where(o => o.CreatedAt >= from.Value);
+            }
+
+            if (to.HasValue)
+            {
+                query = query.Where(o => o.CreatedAt <= to.Value);
+            }
+
+            var orders = await query
                 .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.MenuItem)
-                .Include(o => o.Bill)
-                .Where(o => o.CreatedAt >= startDate && o.CreatedAt <= endDate)
                 .ToListAsync();
 
-            var stats = new
+            var completedOrders = orders.Where(o => o.Status == OrderStatus.Completed).ToList();
+            var totalRevenue = completedOrders.Sum(o => o.OrderItems.Sum(oi => oi.PriceAtOrder * oi.Quantity));
+
+            var stats = new OrderStatistics
             {
                 TotalOrders = orders.Count,
-                CompletedOrders = orders.Count(o => o.Status == OrderStatus.Completed),
+                CompletedOrders = completedOrders.Count,
                 CancelledOrders = orders.Count(o => o.Status == OrderStatus.Cancelled),
-                TotalRevenue = orders
-                    .Where(o => o.Bill != null && o.Bill.IsPaid)
-                    .Sum(o => o.Bill.Total),
-                AverageOrderValue = orders
-                    .Where(o => o.Bill != null && o.Bill.IsPaid)
-                    .Average(o => (decimal?)o.Bill.Total) ?? 0,
-                Orders = orders
+                TotalRevenue = totalRevenue,
+                AverageOrderValue = completedOrders.Count > 0
+                    ? completedOrders.Average(o => o.OrderItems.Sum(oi => oi.PriceAtOrder * oi.Quantity))
+                    : 0,
+                From = from,
+                To = to
             };
 
             return Ok(stats);
         }
 
-        // GET: api/Statistics/revenue/today
-        [HttpGet("revenue/today")]
-        public async Task<ActionResult<object>> GetTodayRevenue()
+        [HttpGet("kitchen")]
+        public async Task<ActionResult<KitchenStatistics>> GetKitchenStatistics([FromQuery] int? restaurantId = null)
         {
-            var today = DateTime.Today;
-            var tomorrow = today.AddDays(1);
+            var query = _context.Orders.AsQueryable();
 
-            var bills = await _context.Bills
-                .Include(b => b.Order)
-                .Where(b => b.IsPaid && b.PaidAt >= today && b.PaidAt < tomorrow)
-                .ToListAsync();
-
-            var stats = new
+            if (restaurantId.HasValue)
             {
-                Date = today.ToString("yyyy-MM-dd"),
-                TotalOrders = bills.Count,
-                TotalRevenue = bills.Sum(b => b.Total),
-                TotalTax = bills.Sum(b => b.Tax),
-                TotalSubtotal = bills.Sum(b => b.Subtotal),
-                AverageOrderValue = bills.Count > 0 ? bills.Average(b => b.Total) : 0
-            };
+                query = query.Where(o => o.RestaurantId == restaurantId.Value);
+            }
 
-            return Ok(stats);
-        }
+            var orders = await query.ToListAsync();
 
-        // GET: api/Statistics/popular-items
-        [HttpGet("popular-items")]
-        public async Task<ActionResult<object>> GetPopularItems([FromQuery] int top = 10)
-        {
+            var completedOrdersWithTimes = orders
+                .Where(o => o.Status == OrderStatus.Completed &&
+                           o.SentToKitchenAt.HasValue &&
+                           o.ReadyAt.HasValue)
+                .ToList();
+
+            var avgPrepTime = completedOrdersWithTimes.Any()
+                ? completedOrdersWithTimes.Average(o => (o.ReadyAt!.Value - o.SentToKitchenAt!.Value).TotalMinutes)
+                : 0;
+
             var popularItems = await _context.OrderItems
                 .Include(oi => oi.MenuItem)
+                .Where(oi => restaurantId == null || oi.MenuItem.RestaurantId == restaurantId)
                 .GroupBy(oi => new { oi.MenuItemId, oi.MenuItem.Name })
-                .Select(g => new
+                .Select(g => new PopularMenuItem
                 {
                     MenuItemId = g.Key.MenuItemId,
                     MenuItemName = g.Key.Name,
-                    TimesOrdered = g.Sum(oi => oi.Quantity),
-                    TotalRevenue = g.Sum(oi => oi.Quantity * oi.PriceAtOrder)
+                    OrderCount = g.Count(),
+                    TotalQuantity = g.Sum(oi => oi.Quantity)
                 })
-                .OrderByDescending(x => x.TimesOrdered)
-                .Take(top)
+                .OrderByDescending(x => x.TotalQuantity)
+                .Take(10)
                 .ToListAsync();
 
-            return Ok(popularItems);
+            var stats = new KitchenStatistics
+            {
+                PendingOrders = orders.Count(o => o.Status == OrderStatus.SentToKitchen),
+                InProgressOrders = orders.Count(o => o.Status == OrderStatus.InProgress),
+                ReadyOrders = orders.Count(o => o.Status == OrderStatus.Ready),
+                AveragePreparationTimeMinutes = Math.Round(avgPrepTime, 2),
+                PopularItems = popularItems
+            };
+
+            return Ok(stats);
         }
 
-        // GET: api/Statistics/tables/usage
-        [HttpGet("tables/usage")]
-        public async Task<ActionResult<object>> GetTableUsage()
+        [HttpGet("waiters")]
+        public async Task<ActionResult<WaiterStatistics>> GetWaiterStatistics([FromQuery] int? userId = null, [FromQuery] int? restaurantId = null)
         {
-            var tables = await _context.Tables
-                .Include(t => t.Orders)
-                .ToListAsync();
+            var query = _context.Orders.AsQueryable();
 
-            var usage = tables.Select(t => new
+            if (userId.HasValue)
             {
-                TableNumber = t.TableNumber,
-                Status = t.Status.ToString(),
-                TotalOrders = t.Orders.Count,
-                CompletedOrders = t.Orders.Count(o => o.Status == OrderStatus.Completed)
-            }).ToList();
-
-            return Ok(usage);
-        }
-
-        // GET: api/Statistics/orders/average-time
-        [HttpGet("orders/average-time")]
-        public async Task<ActionResult<object>> GetAverageOrderTime()
-        {
-            var completedOrders = await _context.Orders
-                .Where(o => o.Status == OrderStatus.Completed && 
-                           o.SentToKitchenAt != null && 
-                           o.ReadyAt != null &&
-                           o.ServedAt != null)
-                .ToListAsync();
-
-            if (!completedOrders.Any())
-            {
-                return Ok(new
-                {
-                    Message = "No completed orders found",
-                    AveragePreparationTime = 0,
-                    AverageDeliveryTime = 0,
-                    AverageTotalTime = 0
-                });
+                query = query.Where(o => o.AssignedWaiterId == userId.Value);
             }
 
-            var avgPrepTime = completedOrders
-                .Average(o => (o.ReadyAt.Value - o.SentToKitchenAt.Value).TotalMinutes);
-
-            var avgDeliveryTime = completedOrders
-                .Average(o => (o.ServedAt.Value - o.ReadyAt.Value).TotalMinutes);
-
-            var avgTotalTime = completedOrders
-                .Average(o => (o.ServedAt.Value - o.SentToKitchenAt.Value).TotalMinutes);
-
-            return Ok(new
+            if (restaurantId.HasValue)
             {
-                AveragePreparationTime = Math.Round(avgPrepTime, 2),
-                AverageDeliveryTime = Math.Round(avgDeliveryTime, 2),
-                AverageTotalTime = Math.Round(avgTotalTime, 2),
-                Unit = "minutes"
-            });
+                query = query.Where(o => o.RestaurantId == restaurantId.Value);
+            }
+
+            var orders = await query.ToListAsync();
+
+            var servedOrdersWithTimes = orders
+                .Where(o => o.Status == OrderStatus.Served &&
+                           o.ReadyAt.HasValue &&
+                           o.ServedAt.HasValue)
+                .ToList();
+
+            var avgServiceTime = servedOrdersWithTimes.Any()
+                ? servedOrdersWithTimes.Average(o => (o.ServedAt!.Value - o.ReadyAt!.Value).TotalMinutes)
+                : 0;
+
+            var assignedTableIds = orders.Select(o => o.TableId).Distinct().ToList();
+
+            var stats = new WaiterStatistics
+            {
+                AssignedTables = assignedTableIds.Count,
+                ActiveOrders = orders.Count(o => o.Status != OrderStatus.Completed && o.Status != OrderStatus.Cancelled),
+                ServedOrders = orders.Count(o => o.Status == OrderStatus.Served || o.Status == OrderStatus.Completed),
+                AverageServiceTimeMinutes = Math.Round(avgServiceTime, 2)
+            };
+
+            return Ok(stats);
         }
     }
 }

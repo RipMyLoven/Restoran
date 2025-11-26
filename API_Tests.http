@@ -1,169 +1,157 @@
-### Restaurant Management API - Test Requests
+# Restaurant Management API - Quick HTTP Tests
+# Use this file with REST Client extension in VS Code
+# Install: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
-### 1. Create Restaurant
-POST https://localhost:5001/api/restaurants
+@baseUrl = http://localhost:5110/api
+@accessToken = 
+
+### Register Admin User
+POST {{baseUrl}}/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Italian Bistro",
+  "username": "admin",
+  "email": "admin@restaurant.com", 
+  "password": "Admin123!",
+  "firstName": "Admin",
+  "lastName": "User",
+  "phoneNumber": "+1234567890"
+}
+
+### Login Admin User (Copy the accessToken from response)
+POST {{baseUrl}}/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "usernameOrEmail": "admin",
+  "password": "Admin123!"
+}
+
+### Create Restaurant
+POST {{baseUrl}}/restaurants HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "name": "Test Restaurant",
   "tableCount": 15,
-  "allergyTags": "gluten,lactose,nuts,shellfish",
-  "dietTags": "vegan,vegetarian,halal,kosher"
+  "allergyTags": "nuts,dairy,gluten,shellfish",
+  "dietTags": "vegetarian,vegan,keto,gluten-free"
 }
 
-###
+### Get All Restaurants
+GET {{baseUrl}}/restaurants HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
-### 2. Get All Restaurants
-GET https://localhost:5001/api/restaurants
+### Get Restaurant By ID (replace 1 with actual restaurant ID)
+GET {{baseUrl}}/restaurants/1 HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
-###
+### Get Restaurant Tables (replace 1 with actual restaurant ID)
+GET {{baseUrl}}/restaurants/1/tables HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
-### 3. Get Restaurant by ID
-GET https://localhost:5001/api/restaurants/1
-
-###
-
-### 4. Create Menu Item
-POST https://localhost:5001/api/menuitems
+### Create Menu Item (replace 1 with actual restaurant ID)
+POST {{baseUrl}}/restaurants/1/menu HTTP/1.1
 Content-Type: application/json
-
-{
-  "name": "Margherita Pizza",
-  "description": "Classic Italian pizza with tomato sauce and mozzarella",
-  "price": 12.99,
-  "category": "Main Course",
-  "allergens": "gluten,lactose",
-  "dietaryInfo": "vegetarian",
-  "restaurantId": 1,
-  "isAvailable": true
-}
-
-###
-
-### 5. Create Another Menu Item
-POST https://localhost:5001/api/menuitems
-Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "name": "Caesar Salad",
-  "description": "Fresh romaine lettuce with caesar dressing",
-  "price": 8.99,
+  "description": "Fresh romaine lettuce with Caesar dressing, croutons and parmesan",
+  "price": 12.99,
   "category": "Appetizer",
-  "allergens": "lactose,eggs",
-  "dietaryInfo": "vegetarian",
-  "restaurantId": 1,
+  "allergyInfo": "dairy,gluten",
+  "dietInfo": "vegetarian",
   "isAvailable": true
 }
 
-###
+### Get Restaurant Menu (replace 1 with actual restaurant ID)
+GET {{baseUrl}}/restaurants/1/menu HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
-### 6. Get All Menu Items
-GET https://localhost:5001/api/menuitems
-
-###
-
-### 7. Get All Tables
-GET https://localhost:5001/api/tables
-
-###
-
-### 8. Create Order
-POST https://localhost:5001/api/orders
+### Create Order (replace IDs with actual values)
+POST {{baseUrl}}/orders HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "tableId": 1,
   "restaurantId": 1,
   "customerName": "John Smith",
-  "specialRequirements": "No onions, extra cheese",
+  "specialRequirements": "No nuts, light on salt",
   "orderItems": [
     {
       "menuItemId": 1,
-      "quantity": 2,
-      "priceAtOrder": 12.99,
-      "specialInstructions": "Well done"
-    },
-    {
-      "menuItemId": 2,
       "quantity": 1,
-      "priceAtOrder": 8.99,
-      "specialInstructions": "No croutons"
+      "specialRequirements": "Extra dressing on the side"
     }
   ]
 }
 
-###
+### Get All Orders
+GET {{baseUrl}}/orders HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
-### 9. Get All Orders
-GET https://localhost:5001/api/orders
+### Update Order Status (replace 1 with actual order ID)
+PATCH {{baseUrl}}/orders/1/status HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
-###
+{
+  "status": "SentToKitchen"
+}
 
-### 10. Send Order to Kitchen
-POST https://localhost:5001/api/orders/1/send-to-kitchen
+### Create Invoice (replace 1 with actual order ID)
+POST {{baseUrl}}/invoices/orders/1/invoice HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
-###
+{
+  "notes": "Thank you for your business!"
+}
 
-### 11. Get Kitchen Orders
-GET https://localhost:5001/api/orders/kitchen
+### Get Order Statistics
+GET {{baseUrl}}/stats/orders HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
-###
+### Get Kitchen Statistics
+GET {{baseUrl}}/stats/kitchen HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
-### 12. Mark Order as Ready (Kitchen)
-POST https://localhost:5001/api/orders/1/mark-ready
+### Get Waiter Statistics
+GET {{baseUrl}}/stats/waiters HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
-###
+### Archive Order (replace 1 with actual order ID)
+POST {{baseUrl}}/archive/orders/1/archive HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
-### 13. Get Ready Orders (Waiter)
-GET https://localhost:5001/api/orders/ready
+### Get Archived Orders
+GET {{baseUrl}}/archive/orders HTTP/1.1
+Authorization: Bearer {{accessToken}}
 
-###
-
-### 14. Mark Order as Served
-POST https://localhost:5001/api/orders/1/mark-served
-
-###
-
-### 15. Generate Bill
-POST https://localhost:5001/api/bills/generate/1
-
-###
-
-### 16. Get Bill by Order ID
-GET https://localhost:5001/api/bills/order/1
-
-###
-
-### 17. Pay Bill
-POST https://localhost:5001/api/bills/1/pay
+### Refresh Token (replace with actual refresh token)
+POST {{baseUrl}}/auth/refresh HTTP/1.1
 Content-Type: application/json
 
 {
-  "paymentMethod": "card"
+  "refreshToken": "your-refresh-token-here"
 }
 
-###
-
-### 18. Get All Bills
-GET https://localhost:5001/api/bills
-
-###
-
-### 19. Get Order by ID
-GET https://localhost:5001/api/orders/1
-
-###
-
-### 20. Update Restaurant
-PUT https://localhost:5001/api/restaurants/1
+### Logout
+POST {{baseUrl}}/auth/logout HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
-  "id": 1,
-  "name": "Italian Bistro Updated",
-  "tableCount": 15,
-  "allergyTags": "gluten,lactose,nuts,shellfish,soy",
-  "dietTags": "vegan,vegetarian,halal,kosher,keto"
+  "refreshToken": "your-refresh-token-here"
 }
 
 ###
+# Health Check (should work without authentication)
+GET {{baseUrl}}/health HTTP/1.1
+
+###
+# Swagger Documentation (open in browser)
+# GET http://localhost:5110/swagger

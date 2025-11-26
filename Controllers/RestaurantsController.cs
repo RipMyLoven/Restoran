@@ -1,17 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Restoran.Data;
 using Restoran.Models;
+using Restoran.DTOs;
 
 namespace Restoran.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
     public class RestaurantsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -21,70 +19,62 @@ namespace Restoran.Controllers
             _context = context;
         }
 
-        // GET: api/Restaurants
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Restaurant>>> GetRestaurants()
+        public async Task<ActionResult<IEnumerable<RestaurantDto>>> GetRestaurants()
         {
-            return await _context.Restaurants
-                .Include(r => r.Tables)
-                .Include(r => r.MenuItems)
-                .ToListAsync();
+            var restaurants = await _context.Restaurants
+                .Select(r => new RestaurantDto
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    TableCount = r.TableCount,
+                    AllergyTags = r.AllergyTags,
+                    DietTags = r.DietTags,
+                    CreatedAt = r.CreatedAt
+                }).ToListAsync();
+
+            return Ok(restaurants);
         }
 
-        // GET: api/Restaurants/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Restaurant>> GetRestaurant(int id)
+        public async Task<ActionResult<RestaurantDto>> GetRestaurant(int id)
         {
             var restaurant = await _context.Restaurants
-                .Include(r => r.Tables)
-                .Include(r => r.MenuItems)
-                .FirstOrDefaultAsync(r => r.Id == id);
+                .Where(r => r.Id == id)
+                .Select(r => new RestaurantDto
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    TableCount = r.TableCount,
+                    AllergyTags = r.AllergyTags,
+                    DietTags = r.DietTags,
+                    CreatedAt = r.CreatedAt
+                }).FirstOrDefaultAsync();
 
             if (restaurant == null)
             {
                 return NotFound();
             }
 
-            return restaurant;
+            return Ok(restaurant);
         }
 
-        // PUT: api/Restaurants/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRestaurant(int id, Restaurant restaurant)
-        {
-            if (id != restaurant.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(restaurant).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RestaurantExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Restaurants
         [HttpPost]
-        public async Task<ActionResult<Restaurant>> PostRestaurant(Restaurant restaurant)
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<ActionResult<RestaurantDto>> CreateRestaurant(CreateRestaurantDto createRestaurantDto)
         {
+            var restaurant = new Restaurant
+            {
+                Name = createRestaurantDto.Name,
+                TableCount = createRestaurantDto.TableCount,
+                AllergyTags = createRestaurantDto.AllergyTags,
+                DietTags = createRestaurantDto.DietTags
+            };
+
             _context.Restaurants.Add(restaurant);
             await _context.SaveChangesAsync();
 
+            // Create tables for the restaurant
             for (int i = 1; i <= restaurant.TableCount; i++)
             {
                 _context.Tables.Add(new Table
@@ -97,11 +87,58 @@ namespace Restoran.Controllers
             }
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRestaurant", new { id = restaurant.Id }, restaurant);
+            var restaurantDto = new RestaurantDto
+            {
+                Id = restaurant.Id,
+                Name = restaurant.Name,
+                TableCount = restaurant.TableCount,
+                AllergyTags = restaurant.AllergyTags,
+                DietTags = restaurant.DietTags,
+                CreatedAt = restaurant.CreatedAt
+            };
+
+            return CreatedAtAction(nameof(GetRestaurant), new { id = restaurant.Id }, restaurantDto);
         }
 
-        // DELETE: api/Restaurants/5
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> UpdateRestaurant(int id, UpdateRestaurantDto updateRestaurantDto)
+        {
+            var restaurant = await _context.Restaurants.FindAsync(id);
+
+            if (restaurant == null)
+            {
+                return NotFound();
+            }
+
+            // Update fields if provided
+            if (updateRestaurantDto.Name != null)
+                restaurant.Name = updateRestaurantDto.Name;
+            if (updateRestaurantDto.TableCount.HasValue)
+                restaurant.TableCount = updateRestaurantDto.TableCount.Value;
+            if (updateRestaurantDto.AllergyTags != null)
+                restaurant.AllergyTags = updateRestaurantDto.AllergyTags;
+            if (updateRestaurantDto.DietTags != null)
+                restaurant.DietTags = updateRestaurantDto.DietTags;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RestaurantExists(id))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteRestaurant(int id)
         {
             var restaurant = await _context.Restaurants.FindAsync(id);

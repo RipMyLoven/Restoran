@@ -1,17 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Restoran.Data;
 using Restoran.Models;
+using Restoran.DTOs;
 
 namespace Restoran.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -21,25 +19,175 @@ namespace Restoran.Controllers
             _context = context;
         }
 
-        // GET: api/Orders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrders([FromQuery] int? restaurantId = null, [FromQuery] string? status = null)
         {
-            return await _context.Orders
+            var query = _context.Orders
                 .Include(o => o.Table)
                 .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.MenuItem)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (restaurantId.HasValue)
+            {
+                query = query.Where(o => o.RestaurantId == restaurantId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(status) && Enum.TryParse<OrderStatus>(status, true, out var orderStatus))
+            {
+                query = query.Where(o => o.Status == orderStatus);
+            }
+
+            var orders = await query.Select(o => new OrderDto
+            {
+                Id = o.Id,
+                TableId = o.TableId,
+                RestaurantId = o.RestaurantId,
+                Status = o.Status,
+                SpecialRequirements = o.SpecialRequirements,
+                CustomerName = o.CustomerName,
+                CreatedAt = o.CreatedAt,
+                SentToKitchenAt = o.SentToKitchenAt,
+                ReadyAt = o.ReadyAt,
+                ServedAt = o.ServedAt,
+                CompletedAt = o.CompletedAt,
+                OrderItems = o.OrderItems.Select(oi => new OrderItemDto
+                {
+                    Id = oi.Id,
+                    MenuItemId = oi.MenuItemId,
+                    MenuItemName = oi.MenuItem.Name,
+                    Quantity = oi.Quantity,
+                    Price = oi.PriceAtOrder,
+                    SpecialRequirements = oi.SpecialInstructions
+                }).ToList(),
+                Total = o.OrderItems.Sum(oi => oi.PriceAtOrder * oi.Quantity)
+            }).ToListAsync();
+
+            return Ok(orders);
         }
 
-        // GET: api/Orders/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
+        public async Task<ActionResult<OrderDto>> GetOrder(int id)
         {
             var order = await _context.Orders
                 .Include(o => o.Table)
                 .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.MenuItem)
+                .Where(o => o.Id == id)
+                .Select(o => new OrderDto
+                {
+                    Id = o.Id,
+                    TableId = o.TableId,
+                    RestaurantId = o.RestaurantId,
+                    Status = o.Status,
+                    SpecialRequirements = o.SpecialRequirements,
+                    CustomerName = o.CustomerName,
+                    CreatedAt = o.CreatedAt,
+                    SentToKitchenAt = o.SentToKitchenAt,
+                    ReadyAt = o.ReadyAt,
+                    ServedAt = o.ServedAt,
+                    CompletedAt = o.CompletedAt,
+                    OrderItems = o.OrderItems.Select(oi => new OrderItemDto
+                    {
+                        Id = oi.Id,
+                        MenuItemId = oi.MenuItemId,
+                        MenuItemName = oi.MenuItem.Name,
+                        Quantity = oi.Quantity,
+                        Price = oi.PriceAtOrder,
+                        SpecialRequirements = oi.SpecialInstructions
+                    }).ToList(),
+                    Total = o.OrderItems.Sum(oi => oi.PriceAtOrder * oi.Quantity)
+                }).FirstOrDefaultAsync();
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(order);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<OrderDto>> CreateOrder(CreateOrderDto createOrderDto)
+        {
+            // Validate table exists
+            var table = await _context.Tables.FindAsync(createOrderDto.TableId);
+            if (table == null)
+            {
+                return BadRequest("Table not found");
+            }
+
+            var order = new Order
+            {
+                TableId = createOrderDto.TableId,
+                RestaurantId = createOrderDto.RestaurantId,
+                SpecialRequirements = createOrderDto.SpecialRequirements,
+                CustomerName = createOrderDto.CustomerName,
+                Status = OrderStatus.New
+            };
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            // Add order items
+            foreach (var orderItemDto in createOrderDto.OrderItems)
+            {
+                var menuItem = await _context.MenuItems.FindAsync(orderItemDto.MenuItemId);
+                if (menuItem == null)
+                {
+                    return BadRequest($"Menu item with ID {orderItemDto.MenuItemId} not found");
+                }
+
+                var orderItem = new OrderItem
+                {
+                    OrderId = order.Id,
+                    MenuItemId = orderItemDto.MenuItemId,
+                    Quantity = orderItemDto.Quantity,
+                    PriceAtOrder = menuItem.Price,
+                    SpecialInstructions = orderItemDto.SpecialRequirements
+                };
+
+                _context.OrderItems.Add(orderItem);
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Load the complete order for response
+            var createdOrder = await _context.Orders
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.MenuItem)
+                .FirstOrDefaultAsync(o => o.Id == order.Id);
+
+            var orderDto = new OrderDto
+            {
+                Id = createdOrder!.Id,
+                TableId = createdOrder.TableId,
+                RestaurantId = createdOrder.RestaurantId,
+                Status = createdOrder.Status,
+                SpecialRequirements = createdOrder.SpecialRequirements,
+                CustomerName = createdOrder.CustomerName,
+                CreatedAt = createdOrder.CreatedAt,
+                OrderItems = createdOrder.OrderItems.Select(oi => new OrderItemDto
+                {
+                    Id = oi.Id,
+                    MenuItemId = oi.MenuItemId,
+                    MenuItemName = oi.MenuItem.Name,
+                    Quantity = oi.Quantity,
+                    Price = oi.PriceAtOrder,
+                    SpecialRequirements = oi.SpecialInstructions
+                }).ToList(),
+                Total = createdOrder.OrderItems.Sum(oi => oi.PriceAtOrder * oi.Quantity)
+            };
+
+            return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, orderDto);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager,Waiter")]
+        public async Task<IActionResult> UpdateOrder(int id, UpdateOrderDto updateOrderDto)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
                 .FirstOrDefaultAsync(o => o.Id == id);
 
             if (order == null)
@@ -47,54 +195,53 @@ namespace Restoran.Controllers
                 return NotFound();
             }
 
-            return order;
-        }
-
-        // PUT: api/Orders/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(int id, Order order)
-        {
-            if (id != order.Id)
+            if (order.Status != OrderStatus.New)
             {
-                return BadRequest();
+                return BadRequest("Can only update orders with 'New' status");
             }
 
-            _context.Entry(order).State = EntityState.Modified;
+            // Update basic fields
+            if (updateOrderDto.SpecialRequirements != null)
+                order.SpecialRequirements = updateOrderDto.SpecialRequirements;
+            if (updateOrderDto.CustomerName != null)
+                order.CustomerName = updateOrderDto.CustomerName;
 
-            try
+            // Update order items if provided
+            if (updateOrderDto.OrderItems != null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
+                // Remove existing order items
+                _context.OrderItems.RemoveRange(order.OrderItems);
+
+                // Add new order items
+                foreach (var orderItemDto in updateOrderDto.OrderItems)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    var menuItem = await _context.MenuItems.FindAsync(orderItemDto.MenuItemId);
+                    if (menuItem == null)
+                    {
+                        return BadRequest($"Menu item with ID {orderItemDto.MenuItemId} not found");
+                    }
+
+                    var orderItem = new OrderItem
+                    {
+                        OrderId = order.Id,
+                        MenuItemId = orderItemDto.MenuItemId,
+                        Quantity = orderItemDto.Quantity,
+                        PriceAtOrder = menuItem.Price,
+                        SpecialInstructions = orderItemDto.SpecialRequirements
+                    };
+
+                    _context.OrderItems.Add(orderItem);
                 }
             }
+
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        // POST: api/Orders
-        [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(Order order)
-        {
-            order.CreatedAt = DateTime.Now;
-            order.Status = OrderStatus.New;
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
-        }
-
-        // POST: api/Orders/5/send-to-kitchen
-        [HttpPost("{id}/send-to-kitchen")]
-        public async Task<IActionResult> SendToKitchen(int id)
+        [HttpPatch("{id}/status")]
+        [Authorize(Roles = "Admin,Manager,Waiter,Cook")]
+        public async Task<IActionResult> UpdateOrderStatus(int id, UpdateOrderStatusDto updateStatusDto)
         {
             var order = await _context.Orders.FindAsync(id);
             if (order == null)
@@ -102,104 +249,74 @@ namespace Restoran.Controllers
                 return NotFound();
             }
 
-            order.Status = OrderStatus.SentToKitchen;
-            order.SentToKitchenAt = DateTime.Now;
-            await _context.SaveChangesAsync();
+            var currentStatus = order.Status;
+            var newStatus = updateStatusDto.Status;
 
-            return Ok(new { message = "Order sent to kitchen", orderId = id });
-        }
-
-        // POST: api/Orders/5/mark-ready
-        [HttpPost("{id}/mark-ready")]
-        public async Task<IActionResult> MarkReady(int id)
-        {
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
+            // Validate status transitions
+            if (!IsValidStatusTransition(currentStatus, newStatus))
             {
-                return NotFound();
+                return BadRequest($"Invalid status transition from {currentStatus} to {newStatus}");
             }
 
-            order.Status = OrderStatus.Ready;
-            order.ReadyAt = DateTime.Now;
-            await _context.SaveChangesAsync();
+            order.Status = newStatus;
 
-            return Ok(new { message = "Order is ready", orderId = id });
-        }
-
-        // POST: api/Orders/5/mark-served
-        [HttpPost("{id}/mark-served")]
-        public async Task<IActionResult> MarkServed(int id)
-        {
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
+            // Update timestamp based on status
+            switch (newStatus)
             {
-                return NotFound();
+                case OrderStatus.SentToKitchen:
+                    order.SentToKitchenAt = DateTime.UtcNow;
+                    break;
+                case OrderStatus.Ready:
+                    order.ReadyAt = DateTime.UtcNow;
+                    break;
+                case OrderStatus.Served:
+                    order.ServedAt = DateTime.UtcNow;
+                    break;
+                case OrderStatus.Completed:
+                    order.CompletedAt = DateTime.UtcNow;
+                    break;
             }
 
-            order.Status = OrderStatus.Served;
-            order.ServedAt = DateTime.Now;
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Order marked as served", orderId = id });
+            return Ok(new { message = $"Order status updated to {newStatus}", orderId = id });
         }
 
-        // POST: api/Orders/5/complete
-        [HttpPost("{id}/complete")]
-        public async Task<IActionResult> CompleteOrder(int id)
-        {
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            order.Status = OrderStatus.Completed;
-            order.CompletedAt = DateTime.Now;
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Order completed", orderId = id });
-        }
-
-        // GET: api/Orders/kitchen
-        [HttpGet("kitchen")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetKitchenOrders()
-        {
-            return await _context.Orders
-                .Include(o => o.Table)
-                .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.MenuItem)
-                .Where(o => o.Status == OrderStatus.SentToKitchen || o.Status == OrderStatus.InProgress)
-                .OrderBy(o => o.SentToKitchenAt)
-                .ToListAsync();
-        }
-
-        // GET: api/Orders/ready
-        [HttpGet("ready")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetReadyOrders()
-        {
-            return await _context.Orders
-                .Include(o => o.Table)
-                .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.MenuItem)
-                .Where(o => o.Status == OrderStatus.Ready)
-                .OrderBy(o => o.ReadyAt)
-                .ToListAsync();
-        }
-
-        // DELETE: api/Orders/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
             if (order == null)
             {
                 return NotFound();
+            }
+
+            if (order.Status != OrderStatus.New && order.Status != OrderStatus.Cancelled)
+            {
+                return BadRequest("Can only delete orders with 'New' or 'Cancelled' status");
             }
 
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        private bool IsValidStatusTransition(OrderStatus currentStatus, OrderStatus newStatus)
+        {
+            return currentStatus switch
+            {
+                OrderStatus.New => newStatus == OrderStatus.SentToKitchen || newStatus == OrderStatus.Cancelled,
+                OrderStatus.SentToKitchen => newStatus == OrderStatus.InProgress || newStatus == OrderStatus.Cancelled,
+                OrderStatus.InProgress => newStatus == OrderStatus.Ready || newStatus == OrderStatus.Cancelled,
+                OrderStatus.Ready => newStatus == OrderStatus.Served || newStatus == OrderStatus.Cancelled,
+                OrderStatus.Served => newStatus == OrderStatus.Completed,
+                _ => false
+            };
         }
 
         private bool OrderExists(int id)
