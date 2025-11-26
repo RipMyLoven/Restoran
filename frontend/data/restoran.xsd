@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <!-- Root element -->
     <xs:element name="restoran">
         <xs:complexType>
             <xs:sequence>
@@ -12,7 +11,6 @@
         </xs:complexType>
     </xs:element>
 
-    <!-- Menüü dimensioon -->
     <xs:element name="menyy">
         <xs:complexType>
             <xs:sequence>
@@ -60,7 +58,6 @@
         </xs:complexType>
     </xs:element>
 
-    <!-- Teeninduse dimensioon -->
     <xs:element name="teenindus">
         <xs:complexType>
             <xs:sequence>
@@ -115,7 +112,6 @@
         </xs:complexType>
     </xs:element>
 
-    <!-- Tellimuste dimensioon -->
     <xs:element name="tellimused">
         <xs:complexType>
             <xs:sequence>
