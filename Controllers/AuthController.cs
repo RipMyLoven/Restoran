@@ -28,13 +28,11 @@ namespace Restoran.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<AuthResponseDto>> Register(RegisterDto registerDto)
         {
-            // Check if user already exists
             if (await _context.Users.AnyAsync(u => u.Username == registerDto.Username || u.Email == registerDto.Email))
             {
                 return BadRequest("User with this username or email already exists");
             }
 
-            // Create new user
             var user = new User
             {
                 Username = registerDto.Username,
@@ -50,7 +48,6 @@ namespace Restoran.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Generate tokens
             var tokens = await GenerateTokensAsync(user);
 
             return Ok(new AuthResponseDto
@@ -78,11 +75,9 @@ namespace Restoran.Controllers
                 return Unauthorized("Account is deactivated");
             }
 
-            // Update last login
             user.LastLoginAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
-            // Generate tokens
             var tokens = await GenerateTokensAsync(user);
 
             return Ok(new AuthResponseDto
@@ -106,10 +101,8 @@ namespace Restoran.Controllers
                 return Unauthorized("Invalid or expired refresh token");
             }
 
-            // Revoke old refresh token
             refreshToken.IsRevoked = true;
 
-            // Generate new tokens
             var tokens = await GenerateTokensAsync(refreshToken.User);
 
             return Ok(new AuthResponseDto
@@ -139,10 +132,8 @@ namespace Restoran.Controllers
 
         private async Task<(string accessToken, string refreshToken)> GenerateTokensAsync(User user)
         {
-            // Generate access token
             var accessToken = GenerateAccessToken(user);
 
-            // Generate refresh token
             var refreshTokenValue = GenerateRefreshToken();
             var refreshToken = new RefreshToken
             {
