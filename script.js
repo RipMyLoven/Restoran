@@ -1,84 +1,58 @@
-function filterTable(tableId, searchValue) {
-    const table = document.getElementById(tableId);
-    const tbody = table.querySelector("tbody");
-    const rows = tbody.querySelectorAll("tr");
-
-    searchValue = searchValue.toLowerCase();
-
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(searchValue)) {
-        } else {
-        }
-    });
-}
-
-const tableSortState = {};
-
-function sortTableByHeader(tableId, columnIndex) {
-    const table = document.getElementById(tableId);
+// Функция сортировки таблицы
+function sortTable(table, columnIndex) {
     const tbody = table.querySelector("tbody");
     const rows = Array.from(tbody.querySelectorAll("tr"));
-
-    if (!tableSortState[tableId]) {
-        tableSortState[tableId] = {};
-    }
-
-    const currentSort = tableSortState[tableId][columnIndex];
-    const isDesc = currentSort === 'asc';
-    tableSortState[tableId][columnIndex] = isDesc ? 'desc' : 'asc';
-
-    table.querySelectorAll(".sort-indicator").forEach(indicator => {
-        indicator.textContent = "";
+    const header = table.querySelectorAll("th")[columnIndex];
+    
+    // Определяем направление сортировки
+    const currentDirection = header.getAttribute("data-sort-direction") || "asc";
+    const newDirection = currentDirection === "asc" ? "desc" : "asc";
+    
+    // Убираем индикаторы со всех заголовков
+    table.querySelectorAll("th").forEach(th => {
+        th.removeAttribute("data-sort-direction");
+        th.classList.remove("sorted-asc", "sorted-desc");
     });
-
-    const currentHeader = table.querySelector(`thead tr th:nth-child(${columnIndex + 1}) .sort-indicator`);
-    if (currentHeader) {
-        currentHeader.textContent = isDesc ? " ↓" : " ↑";
-    }
-
+    
+    // Устанавливаем новое направление
+    header.setAttribute("data-sort-direction", newDirection);
+    header.classList.add(newDirection === "asc" ? "sorted-asc" : "sorted-desc");
+    
+    // Сортируем строки
     rows.sort((a, b) => {
         let aValue = a.cells[columnIndex].textContent.trim();
         let bValue = b.cells[columnIndex].textContent.trim();
-
-        const aSort = a.cells[columnIndex].getAttribute("data-sort");
-        const bSort = b.cells[columnIndex].getAttribute("data-sort");
-
-        if (aSort && bSort) {
-            aValue = parseFloat(aSort);
-            bValue = parseFloat(bSort);
-        } else {
-            const aClean = aValue.replace(/[€L,\s]/g, "");
-            const bClean = bValue.replace(/[€L,\s]/g, "");
-
-            const aNum = parseFloat(aClean);
-            const bNum = parseFloat(bClean);
-
-            if (!isNaN(aNum) && !isNaN(bNum)) {
-                aValue = aNum;
-                bValue = bNum;
-            }
-        }
-
+        
+        // Пробуем преобразовать в число
+        const aNum = parseFloat(aValue.replace(/[€,\s]/g, '').replace(',', '.'));
+        const bNum = parseFloat(bValue.replace(/[€,\s]/g, '').replace(',', '.'));
+        
         let result;
-        if (typeof aValue === "number" && typeof bValue === "number") {
-            result = aValue - bValue;
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+            result = aNum - bNum;
         } else {
-            result = aValue.toString().localeCompare(bValue.toString(), 'et');
+            result = aValue.localeCompare(bValue, 'et', { sensitivity: 'base' });
         }
-
-        return isDesc ? -result : result;
+        
+        return newDirection === "asc" ? result : -result;
     });
-
+    
+    // Перестраиваем таблицу
     rows.forEach(row => tbody.appendChild(row));
 }
 
-function sortTable(tableId, columnIndex) {
-    sortTableByHeader(tableId, parseInt(columnIndex));
-}
-
+// Инициализация при загрузке страницы
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("th[onclick]").forEach(th => {
+    // Добавляем обработчики кликов на заголовки таблиц
+    document.querySelectorAll(".data-table th").forEach((th, index) => {
+        th.style.cursor = "pointer";
+        th.style.userSelect = "none";
         th.title = "Kliki sortimiseks";
+        
+        th.addEventListener("click", function() {
+            const table = this.closest("table");
+            const columnIndex = Array.from(this.parentElement.children).indexOf(this);
+            sortTable(table, columnIndex);
+        });
     });
 });

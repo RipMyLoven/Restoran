@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    
+    <!-- Root element -->
+    <xs:element name="restoran">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="menyy" type="MenyyType"/>
+                <xs:element name="teenindus" type="TeenindusType"/>
+                <xs:element name="tellimused" type="TellimusedType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <!-- Menyy Type -->
+    <xs:complexType name="MenyyType">
+        <xs:sequence>
+            <xs:element name="tooted" type="ToitedType"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- Tooted Type -->
+    <xs:complexType name="ToitedType">
+        <xs:sequence>
+            <xs:element name="toit" type="ToitType" maxOccurs="unbounded"/>
+            <xs:element name="jook" type="JookType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- Toit Type -->
+    <xs:complexType name="ToitType">
+        <xs:sequence>
+            <xs:element name="nimetus" type="xs:string"/>
+            <xs:element name="koostis" type="xs:string"/>
+            <xs:element name="kalorsus" type="xs:positiveInteger"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="liik" type="xs:string" use="required"/>
+        <xs:attribute name="hind" type="xs:decimal" use="required"/>
+    </xs:complexType>
+    
+    <!-- Jook Type -->
+    <xs:complexType name="JookType">
+        <xs:sequence>
+            <xs:element name="nimetus" type="xs:string"/>
+            <xs:element name="tootja" type="xs:string"/>
+            <xs:element name="alkoholiProtsent" type="xs:decimal"/>
+            <xs:element name="hind" type="xs:decimal"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="liik" type="xs:string" use="required"/>
+        <xs:attribute name="maht" type="xs:decimal" use="required"/>
+    </xs:complexType>
+    
+    <!-- Teenindus Type -->
+    <xs:complexType name="TeenindusType">
+        <xs:sequence>
+            <xs:element name="lauad" type="LauadType"/>
+            <xs:element name="teenindajad" type="TeenindajadType"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- Lauad Type -->
+    <xs:complexType name="LauadType">
+        <xs:sequence>
+            <xs:element name="laud" type="LaudType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- Laud Type -->
+    <xs:complexType name="LaudType">
+        <xs:sequence>
+            <xs:element name="reserveeritud" type="xs:string"/>
+            <xs:element name="erinoued" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="kohtade_arv" type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="staatus" type="xs:string" use="required"/>
+        <xs:attribute name="asukoht" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <!-- Teenindajad Type -->
+    <xs:complexType name="TeenindajadType">
+        <xs:sequence>
+            <xs:element name="teenindaja" type="TeenindajaType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- Teenindaja Type -->
+    <xs:complexType name="TeenindajaType">
+        <xs:sequence>
+            <xs:element name="nimi" type="xs:string"/>
+            <xs:element name="telefon" type="xs:string"/>
+            <xs:element name="tööaeg" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="staatus" type="xs:string" use="required"/>
+        <xs:attribute name="kogemus" type="xs:positiveInteger" use="required"/>
+    </xs:complexType>
+    
+    <!-- Tellimused Type -->
+    <xs:complexType name="TellimusedType">
+        <xs:sequence>
+            <xs:element name="tellimus" type="TellimusType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- Tellimus Type -->
+    <xs:complexType name="TellimusType">
+        <xs:sequence>
+            <xs:element name="tellimuse_aeg" type="xs:string"/>
+            <xs:element name="kliendi_info" type="KliendiInfoType"/>
+            <xs:element name="kogusumma" type="xs:decimal"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="laud_id" type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="teenindaja_id" type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="staatus" type="xs:string" use="required"/>
+        <xs:attribute name="prioriteet" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <!-- Kliendi Info Type -->
+    <xs:complexType name="KliendiInfoType">
+        <xs:sequence>
+            <xs:element name="nimi" type="xs:string"/>
+            <xs:element name="telefon" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>

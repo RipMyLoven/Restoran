@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<restoran xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="restoran.xsd">
+    <menyy>
+        <tooted>
+            <toit id="101" liik="praad" hind="12.50">
+                <nimetus>Grillitud lõhesteak</nimetus>
+                <koostis>Lõhe, kartul, köögiviljad, sidrunikaste</koostis>
+                <kalorsus>450</kalorsus>
+            </toit>
+            <toit id="102" liik="supp" hind="6.80">
+                <nimetus>Kanasupp nuudlitega</nimetus>
+                <koostis>Kana, nuudlid, porgand, sibul, petersell</koostis>
+                <kalorsus>280</kalorsus>
+            </toit>
+            <toit id="103" liik="salat" hind="8.90">
+                <nimetus>Caesari salat</nimetus>
+                <koostis>Salat, kana, peekon, krutonid, parmesani juust, Caesar'i kaste</koostis>
+                <kalorsus>320</kalorsus>
+            </toit>
+            <toit id="104" liik="praad" hind="15.00">
+                <nimetus>Veisesteak</nimetus>
+                <koostis>Veiseliha, grillitud köögiviljad, kartulipüree</koostis>
+                <kalorsus>580</kalorsus>
+            </toit>
+            <toit id="105" liik="pasta" hind="9.50">
+                <nimetus>Carbonara</nimetus>
+                <koostis>Pasta, peekon, muna, parmesani juust, must pipar</koostis>
+                <kalorsus>420</kalorsus>
+            </toit>
+            <jook id="201" liik="alkohoolne" maht="0.5">
+                <nimetus>Õlu Saku</nimetus>
+                <tootja>Saku Õlletehas</tootja>
+                <alkoholiProtsent>5.2</alkoholiProtsent>
+                <hind>4.50</hind>
+            </jook>
+            <jook id="202" liik="alkoholivaba" maht="0.33">
+                <nimetus>Coca-Cola</nimetus>
+                <tootja>Coca-Cola Company</tootja>
+                <alkoholiProtsent>0</alkoholiProtsent>
+                <hind>2.80</hind>
+            </jook>
+            <jook id="203" liik="alkohoolne" maht="0.75">
+                <nimetus>Punane vein</nimetus>
+                <tootja>Valdo Wines</tootja>
+                <alkoholiProtsent>13.5</alkoholiProtsent>
+                <hind>18.00</hind>
+            </jook>
+            <jook id="204" liik="alkoholivaba" maht="0.25">
+                <nimetus>Apelsinimahl</nimetus>
+                <tootja>Mahlakeskus</tootja>
+                <alkoholiProtsent>0</alkoholiProtsent>
+                <hind>3.20</hind>
+            </jook>
+        </tooted>
+    </menyy>
+    <teenindus>
+        <lauad>
+            <laud kohtade_arv="4" staatus="vaba" asukoht="aken">
+                <reserveeritud>ei</reserveeritud>
+                <erinoued>-</erinoued>
+            </laud>
+            <laud kohtade_arv="2" staatus="kinni" asukoht="nurk">
+                <reserveeritud>jah</reserveeritud>
+                <erinoued>Laste tool vajalik</erinoued>
+            </laud>
+            <laud kohtade_arv="6" staatus="vaba" asukoht="terrass">
+                <reserveeritud>ei</reserveeritud>
+                <erinoued>-</erinoued>
+            </laud>
+            <laud kohtade_arv="4" staatus="kinni" asukoht="keskmine">
+                <reserveeritud>jah</reserveeritud>
+                <erinoued>Allergia pähklite suhtes</erinoued>
+            </laud>
+            <laud kohtade_arv="8" staatus="vaba" asukoht="vip">
+                <reserveeritud>ei</reserveeritud>
+                <erinoued>-</erinoued>
+            </laud>
+        </lauad>
+        <teenindajad>
+            <teenindaja staatus="aktiivne" kogemus="5">
+                <nimi>Maria Tamm</nimi>
+                <telefon>+372 5123 4567</telefon>
+                <tööaeg>09:00-17:00</tööaeg>
+            </teenindaja>
+            <teenindaja staatus="aktiivne" kogemus="2">
+                <nimi>Jaan Kask</nimi>
+                <telefon>+372 5234 5678</telefon>
+                <tööaeg>13:00-21:00</tööaeg>
+            </teenindaja>
+            <teenindaja staatus="puhkusel" kogemus="8">
+                <nimi>Anna Lepp</nimi>
+                <telefon>+372 5345 6789</telefon>
+                <tööaeg>17:00-01:00</tööaeg>
+            </teenindaja>
+            <teenindaja staatus="aktiivne" kogemus="3">
+                <nimi>Peeter Saar</nimi>
+                <telefon>+372 5456 7890</telefon>
+                <tööaeg>09:00-17:00</tööaeg>
+            </teenindaja>
+        </teenindajad>
+    </teenindus>
+    <tellimused>
+        <tellimus id="1001" laud_id="2" teenindaja_id="1" staatus="valmistamisel" prioriteet="kõrge">
+            <tellimuse_aeg>2025-11-27 12:30:00</tellimuse_aeg>
+            <kliendi_info>
+                <nimi>Kati Mets</nimi>
+                <telefon>+372 5567 8901</telefon>
+            </kliendi_info>
+            <kogusumma>28.30</kogusumma>
+        </tellimus>
+        <tellimus id="1002" laud_id="4" teenindaja_id="2" staatus="ootel" prioriteet="keskmine">
+            <tellimuse_aeg>2025-11-27 13:15:00</tellimuse_aeg>
+            <kliendi_info>
+                <nimi>Mart Kuusk</nimi>
+                <telefon>+372 5678 9012</telefon>
+            </kliendi_info>
+            <kogusumma>45.80</kogusumma>
+        </tellimus>
+        <tellimus id="1003" laud_id="1" teenindaja_id="4" staatus="valmis" prioriteet="madal">
+            <tellimuse_aeg>2025-11-27 11:45:00</tellimuse_aeg>
+            <kliendi_info>
+                <nimi>Liis Õun</nimi>
+                <telefon>+372 5789 0123</telefon>
+            </kliendi_info>
+            <kogusumma>15.60</kogusumma>
+        </tellimus>
+        <tellimus id="1004" laud_id="3" teenindaja_id="1" staatus="ootel" prioriteet="kõrge">
+            <tellimuse_aeg>2025-11-27 14:00:00</tellimuse_aeg>
+            <kliendi_info>
+                <nimi>Toomas Pärn</nimi>
+                <telefon>+372 5890 1234</telefon>
+            </kliendi_info>
+            <kogusumma>67.50</kogusumma>
+        </tellimus>
+    </tellimused>
+</restoran>

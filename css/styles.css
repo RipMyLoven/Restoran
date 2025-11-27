@@ -1,283 +1,215 @@
-.main-nav {
-    background: linear-gradient(135deg, #007cba, #005a87);
-    padding: 15px 0;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.nav-brand {
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-decoration: none;
-    margin-right: 30px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 0;
-    flex-wrap: wrap;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    margin: 2px;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.nav-links a.active {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-@media (max-width: 768px) {
-    .nav-container {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .nav-links {
-        justify-content: center;
-    }
+/* Базовые стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    background: #f8f9fa;
-    border-top: 5px solid red;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.hero {
-    background: linear-gradient(135deg, #007cba, #005a87);
-    color: white;
-    padding: 60px 0;
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.hero h1 {
-    font-size: 3em;
-    margin: 0 0 20px 0;
-}
-
-.hero p {
-    font-size: 1.2em;
-    margin: 0;
-    opacity: 0.9;
-}
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-.card {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.card-icon {
-    font-size: 3em;
-    margin-bottom: 20px;
-}
-
-.card h3 {
-    color: #007cba;
-    margin-bottom: 15px;
-}
-
-.card p {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
-
-body.data-view {
-    margin: 20px;
-    background: #f8f9fa;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 10px 0;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-th,
-td {
-    border: 1px solid #ddd;
-    padding: 12px 8px;
-    text-align: left;
-}
-
-th {
-    background-color: #007cba;
-    color: white;
-    font-weight: bold;
-}
-
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-h2 {
+    background: #f5f5f5;
     color: #333;
+    line-height: 1.6;
 }
 
-.menu-section {
-    margin: 30px 0;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.table-controls {
-    background: #f8f9fa;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-}
-
-.search-input {
-    padding: 8px 12px;
-    border: 2px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    min-width: 200px;
-}
-
-.sort-select {
-    padding: 8px 12px;
-    border: 2px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    background: white;
-}
-
-body.manage-view {
-    margin: 20px;
-    background-color: #f5f5f5;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-button {
-    background: #007cba;
+/* Шапка */
+header {
+    background: #2c3e50;
     color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-.success {
-    color: green;
-    padding: 10px;
-    background: #d4edda;
-    border: 1px solid #c3e6cb;
-    border-radius: 4px;
-}
-
-.error {
-    color: red;
-    padding: 10px;
-    background: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 4px;
-}
-
-.nav {
+    padding: 20px 0;
     margin-bottom: 20px;
 }
 
-.nav a {
-    display: inline-block;
-    padding: 10px 15px;
-    margin-right: 10px;
-    background: #6c757d;
+header h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+/* Навигация */
+nav {
+    text-align: center;
+    padding: 0 10px;
+}
+
+nav a {
     color: white;
     text-decoration: none;
+    padding: 8px 16px;
+    margin: 0 5px;
+    background: #34495e;
     border-radius: 4px;
+    display: inline-block;
 }
 
-.two-column {
+nav a:hover {
+    background: #4a5f7f;
+}
+
+/* Контейнер */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px 20px;
+}
+
+/* Секции */
+.menu-section,
+.service-section,
+.orders-section {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.menu-section h2,
+.service-section h2,
+.orders-section h2 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #2c3e50;
+}
+
+/* Сетка товаров */
+.items-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
 }
 
-th[onclick] {
+.item-card {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.item-card h3 {
+    color: #2c3e50;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.item-card p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.item-type {
+    font-weight: bold;
+    color: #555;
+}
+
+.item-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #27ae60;
+    margin-top: 10px;
+}
+
+.item-ingredients,
+.item-producer {
+    color: #666;
+    font-style: italic;
+}
+
+.item-calories,
+.item-volume,
+.item-alcohol {
+    font-size: 13px;
+    color: #888;
+}
+
+/* Таблицы */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+}
+
+.data-table thead {
+    background: #2c3e50;
+    color: white;
+}
+
+.data-table th {
+    padding: 12px 8px;
+    text-align: left;
+    font-weight: bold;
     cursor: pointer;
     user-select: none;
+    position: relative;
 }
 
+.data-table th:hover {
+    background: #34495e;
+}
 
-.sort-indicator {
-    font-weight: normal;
-    font-size: 0.8em;
+.data-table th.sorted-asc::after {
+    content: " ▲";
+    font-size: 10px;
     margin-left: 5px;
 }
 
+.data-table th.sorted-desc::after {
+    content: " ▼";
+    font-size: 10px;
+    margin-left: 5px;
+}
 
+.data-table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
 
-.btn.home-btn {
-    display: inline-block;
-    padding: 12px 24px;
-    background: #007cba;
+.data-table tbody tr:hover {
+    background: #f5f5f5;
+}
+
+.data-table td {
+    padding: 10px 8px;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+/* Подвал */
+footer {
+    background: #2c3e50;
     color: white;
-    text-decoration: none;
-    border-radius: 6px;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 30px;
+}
+
+footer p {
+    margin: 0;
+}
+
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .items-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    nav a {
+        display: block;
+        margin: 5px 0;
+    }
+    
+    .data-table {
+        font-size: 12px;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 8px 4px;
+    }
 }

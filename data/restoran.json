@@ -1,0 +1,259 @@
+{
+    "menyy": {
+        "tooted": {
+            "toit": [
+                {
+                    "@attributes": {
+                        "id": "101",
+                        "liik": "praad",
+                        "hind": "12.50"
+                    },
+                    "nimetus": "Grillitud lõhesteak",
+                    "koostis": "Lõhe, kartul, köögiviljad, sidrunikaste",
+                    "kalorsus": "450"
+                },
+                {
+                    "@attributes": {
+                        "id": "102",
+                        "liik": "supp",
+                        "hind": "6.80"
+                    },
+                    "nimetus": "Kanasupp nuudlitega",
+                    "koostis": "Kana, nuudlid, porgand, sibul, petersell",
+                    "kalorsus": "280"
+                },
+                {
+                    "@attributes": {
+                        "id": "103",
+                        "liik": "salat",
+                        "hind": "8.90"
+                    },
+                    "nimetus": "Caesari salat",
+                    "koostis": "Salat, kana, peekon, krutonid, parmesani juust, Caesar'i kaste",
+                    "kalorsus": "320"
+                },
+                {
+                    "@attributes": {
+                        "id": "104",
+                        "liik": "praad",
+                        "hind": "15.00"
+                    },
+                    "nimetus": "Veisesteak",
+                    "koostis": "Veiseliha, grillitud köögiviljad, kartulipüree",
+                    "kalorsus": "580"
+                },
+                {
+                    "@attributes": {
+                        "id": "105",
+                        "liik": "pasta",
+                        "hind": "9.50"
+                    },
+                    "nimetus": "Carbonara",
+                    "koostis": "Pasta, peekon, muna, parmesani juust, must pipar",
+                    "kalorsus": "420"
+                }
+            ],
+            "jook": [
+                {
+                    "@attributes": {
+                        "id": "201",
+                        "liik": "alkohoolne",
+                        "maht": "0.5"
+                    },
+                    "nimetus": "Õlu Saku",
+                    "tootja": "Saku Õlletehas",
+                    "alkoholiProtsent": "5.2",
+                    "hind": "4.50"
+                },
+                {
+                    "@attributes": {
+                        "id": "202",
+                        "liik": "alkoholivaba",
+                        "maht": "0.33"
+                    },
+                    "nimetus": "Coca-Cola",
+                    "tootja": "Coca-Cola Company",
+                    "alkoholiProtsent": "0",
+                    "hind": "2.80"
+                },
+                {
+                    "@attributes": {
+                        "id": "203",
+                        "liik": "alkohoolne",
+                        "maht": "0.75"
+                    },
+                    "nimetus": "Punane vein",
+                    "tootja": "Valdo Wines",
+                    "alkoholiProtsent": "13.5",
+                    "hind": "18.00"
+                },
+                {
+                    "@attributes": {
+                        "id": "204",
+                        "liik": "alkoholivaba",
+                        "maht": "0.25"
+                    },
+                    "nimetus": "Apelsinimahl",
+                    "tootja": "Mahlakeskus",
+                    "alkoholiProtsent": "0",
+                    "hind": "3.20"
+                }
+            ]
+        }
+    },
+    "teenindus": {
+        "lauad": {
+            "laud": [
+                {
+                    "@attributes": {
+                        "kohtade_arv": "4",
+                        "staatus": "vaba",
+                        "asukoht": "aken"
+                    },
+                    "reserveeritud": "ei",
+                    "erinoued": "-"
+                },
+                {
+                    "@attributes": {
+                        "kohtade_arv": "2",
+                        "staatus": "kinni",
+                        "asukoht": "nurk"
+                    },
+                    "reserveeritud": "jah",
+                    "erinoued": "Laste tool vajalik"
+                },
+                {
+                    "@attributes": {
+                        "kohtade_arv": "6",
+                        "staatus": "vaba",
+                        "asukoht": "terrass"
+                    },
+                    "reserveeritud": "ei",
+                    "erinoued": "-"
+                },
+                {
+                    "@attributes": {
+                        "kohtade_arv": "4",
+                        "staatus": "kinni",
+                        "asukoht": "keskmine"
+                    },
+                    "reserveeritud": "jah",
+                    "erinoued": "Allergia pähklite suhtes"
+                },
+                {
+                    "@attributes": {
+                        "kohtade_arv": "8",
+                        "staatus": "vaba",
+                        "asukoht": "vip"
+                    },
+                    "reserveeritud": "ei",
+                    "erinoued": "-"
+                }
+            ]
+        },
+        "teenindajad": {
+            "teenindaja": [
+                {
+                    "@attributes": {
+                        "staatus": "aktiivne",
+                        "kogemus": "5"
+                    },
+                    "nimi": "Maria Tamm",
+                    "telefon": "+372 5123 4567",
+                    "tööaeg": "09:00-17:00"
+                },
+                {
+                    "@attributes": {
+                        "staatus": "aktiivne",
+                        "kogemus": "2"
+                    },
+                    "nimi": "Jaan Kask",
+                    "telefon": "+372 5234 5678",
+                    "tööaeg": "13:00-21:00"
+                },
+                {
+                    "@attributes": {
+                        "staatus": "puhkusel",
+                        "kogemus": "8"
+                    },
+                    "nimi": "Anna Lepp",
+                    "telefon": "+372 5345 6789",
+                    "tööaeg": "17:00-01:00"
+                },
+                {
+                    "@attributes": {
+                        "staatus": "aktiivne",
+                        "kogemus": "3"
+                    },
+                    "nimi": "Peeter Saar",
+                    "telefon": "+372 5456 7890",
+                    "tööaeg": "09:00-17:00"
+                }
+            ]
+        }
+    },
+    "tellimused": {
+        "tellimus": [
+            {
+                "@attributes": {
+                    "id": "1001",
+                    "laud_id": "2",
+                    "teenindaja_id": "1",
+                    "staatus": "valmistamisel",
+                    "prioriteet": "kõrge"
+                },
+                "tellimuse_aeg": "2025-11-27 12:30:00",
+                "kliendi_info": {
+                    "nimi": "Kati Mets",
+                    "telefon": "+372 5567 8901"
+                },
+                "kogusumma": "28.30"
+            },
+            {
+                "@attributes": {
+                    "id": "1002",
+                    "laud_id": "4",
+                    "teenindaja_id": "2",
+                    "staatus": "ootel",
+                    "prioriteet": "keskmine"
+                },
+                "tellimuse_aeg": "2025-11-27 13:15:00",
+                "kliendi_info": {
+                    "nimi": "Mart Kuusk",
+                    "telefon": "+372 5678 9012"
+                },
+                "kogusumma": "45.80"
+            },
+            {
+                "@attributes": {
+                    "id": "1003",
+                    "laud_id": "1",
+                    "teenindaja_id": "4",
+                    "staatus": "valmis",
+                    "prioriteet": "madal"
+                },
+                "tellimuse_aeg": "2025-11-27 11:45:00",
+                "kliendi_info": {
+                    "nimi": "Liis Õun",
+                    "telefon": "+372 5789 0123"
+                },
+                "kogusumma": "15.60"
+            },
+            {
+                "@attributes": {
+                    "id": "1004",
+                    "laud_id": "3",
+                    "teenindaja_id": "1",
+                    "staatus": "ootel",
+                    "prioriteet": "kõrge"
+                },
+                "tellimuse_aeg": "2025-11-27 14:00:00",
+                "kliendi_info": {
+                    "nimi": "Toomas Pärn",
+                    "telefon": "+372 5890 1234"
+                },
+                "kogusumma": "67.50"
+            }
+        ]
+    }
+}

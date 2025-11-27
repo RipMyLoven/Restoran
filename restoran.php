@@ -127,7 +127,7 @@ function searchTablesByStatus($xml, $status) {
 }
 
 function xmlToHtml($xmlFile) {
-    return showView('main');
+    return showView('home');
 }
 
 function loadJsonData($jsonFile) {
@@ -170,6 +170,38 @@ function addFoodToJson($jsonFile, $foodData) {
     ];
     
     $data['menyy']['tooted']['toit'][] = $newFood;
+    
+    return saveJsonData($jsonFile, $data);
+}
+
+function addDrinkToJson($jsonFile, $drinkData) {
+    $data = loadJsonData($jsonFile);
+    if (!$data) {
+        return false;
+    }
+    
+    $maxId = 200;
+    foreach ($data['menyy']['tooted']['jook'] as $jook) {
+        $currentId = (int)$jook['@attributes']['id'];
+        if ($currentId > $maxId) {
+            $maxId = $currentId;
+        }
+    }
+    $newId = $maxId + 1;
+    
+    $newDrink = [
+        '@attributes' => [
+            'id' => (string)$newId,
+            'liik' => $drinkData['liik'],
+            'maht' => $drinkData['maht']
+        ],
+        'nimetus' => $drinkData['nimetus'],
+        'tootja' => $drinkData['tootja'],
+        'alkoholiProtsent' => $drinkData['alkoholiProtsent'],
+        'hind' => $drinkData['hind']
+    ];
+    
+    $data['menyy']['tooted']['jook'][] = $newDrink;
     
     return saveJsonData($jsonFile, $data);
 }
@@ -229,6 +261,60 @@ function xmlToJson($xmlFile, $jsonFile) {
     return $json;
 }
 
+// Обработка POST-запросов для добавления данных
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action'])) {
+        $success = false;
+        $message = '';
+        
+        switch ($_POST['action']) {
+            case 'add_food':
+                $foodData = [
+                    'nimetus' => $_POST['nimetus'] ?? '',
+                    'liik' => $_POST['liik'] ?? '',
+                    'koostis' => $_POST['koostis'] ?? '',
+                    'kalorsus' => $_POST['kalorsus'] ?? '',
+                    'hind' => $_POST['hind'] ?? ''
+                ];
+                $success = addFoodToJson($jsonFile, $foodData);
+                $message = $success ? 'Toit edukalt lisatud!' : 'Viga toidu lisamisel.';
+                break;
+                
+            case 'add_drink':
+                $drinkData = [
+                    'nimetus' => $_POST['nimetus'] ?? '',
+                    'liik' => $_POST['liik'] ?? '',
+                    'tootja' => $_POST['tootja'] ?? '',
+                    'maht' => $_POST['maht'] ?? '',
+                    'alkoholiProtsent' => $_POST['alkoholiProtsent'] ?? '',
+                    'hind' => $_POST['hind'] ?? ''
+                ];
+                $success = addDrinkToJson($jsonFile, $drinkData);
+                $message = $success ? 'Jook edukalt lisatud!' : 'Viga joogi lisamisel.';
+                break;
+                
+            case 'add_order':
+                $orderData = [
+                    'laud_id' => $_POST['laud_id'] ?? '',
+                    'teenindaja_id' => $_POST['teenindaja_id'] ?? '',
+                    'klient_nimi' => $_POST['klient_nimi'] ?? '',
+                    'klient_telefon' => $_POST['klient_telefon'] ?? '',
+                    'tellimuse_aeg' => $_POST['tellimuse_aeg'] ?? '',
+                    'staatus' => $_POST['staatus'] ?? '',
+                    'prioriteet' => $_POST['prioriteet'] ?? '',
+                    'kogusumma' => $_POST['kogusumma'] ?? ''
+                ];
+                $success = addOrderToJson($jsonFile, $orderData);
+                $message = $success ? 'Tellimus edukalt lisatud!' : 'Viga tellimuse lisamisel.';
+                break;
+        }
+        
+        // Перенаправление с сообщением
+        header('Location: ?view=add&status=' . ($success ? 'success' : 'error') . '&message=' . urlencode($message));
+        exit;
+    }
+}
+
 if (empty($_GET) && empty($_POST)) {
     header('Location: ?format=html');
     exit;
@@ -242,6 +328,11 @@ if (isset($_GET['format']) && $_GET['format'] == 'html') {
 if (isset($_GET['format']) && $_GET['format'] == 'json') {
     header('Content-Type: application/json; charset=utf-8');
     echo xmlToJson($xmlFile, $jsonFile);
+    exit;
+}
+
+if (isset($_GET['view']) && $_GET['view'] == 'add') {
+    echo showView('add');
     exit;
 }
 
