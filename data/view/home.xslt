@@ -3,7 +3,6 @@
     <xsl:output method="html" encoding="UTF-8" indent="yes"/>
     
     <xsl:template match="/">
-        <!DOCTYPE html>
         <html lang="et">
         <head>
             <meta charset="UTF-8"/>
@@ -24,33 +23,56 @@
             <main>
                 <section class="menu-section">
                     <h2>Menüü - Toidud</h2>
-                    <div class="items-grid">
-                        <xsl:for-each select="restoran/menyy/tooted/toit">
-                            <div class="item-card">
-                                <h3><xsl:value-of select="nimetus"/></h3>
-                                <p class="item-type">Liik: <xsl:value-of select="@liik"/></p>
-                                <p class="item-ingredients">Koostis: <xsl:value-of select="koostis"/></p>
-                                <p class="item-calories">Kalorsus: <xsl:value-of select="kalorsus"/> kcal</p>
-                                <p class="item-price">Hind: <xsl:value-of select="@hind"/>€</p>
-                            </div>
-                        </xsl:for-each>
-                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nimetus</th>
+                                <th>Liik</th>
+                                <th>Koostis</th>
+                                <th>Kalorsus (kcal)</th>
+                                <th>Hind (€)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <xsl:for-each select="restoran/menyy/tooted/toit">
+                                <tr>
+                                    <td><xsl:value-of select="nimetus"/></td>
+                                    <td><xsl:value-of select="@liik"/></td>
+                                    <td><xsl:value-of select="koostis"/></td>
+                                    <td><xsl:value-of select="kalorsus"/></td>
+                                    <td><xsl:value-of select="@hind"/></td>
+                                </tr>
+                            </xsl:for-each>
+                        </tbody>
+                    </table>
                 </section>
                 
                 <section class="menu-section">
                     <h2>Menüü - Joogid</h2>
-                    <div class="items-grid">
-                        <xsl:for-each select="restoran/menyy/tooted/jook">
-                            <div class="item-card">
-                                <h3><xsl:value-of select="nimetus"/></h3>
-                                <p class="item-type">Liik: <xsl:value-of select="@liik"/></p>
-                                <p class="item-producer">Tootja: <xsl:value-of select="tootja"/></p>
-                                <p class="item-volume">Maht: <xsl:value-of select="@maht"/>L</p>
-                                <p class="item-alcohol">Alkohol: <xsl:value-of select="alkoholiProtsent"/>%</p>
-                                <p class="item-price">Hind: <xsl:value-of select="hind"/>€</p>
-                            </div>
-                        </xsl:for-each>
-                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nimetus</th>
+                                <th>Liik</th>
+                                <th>Tootja</th>
+                                <th>Maht (L)</th>
+                                <th>Alkohol (%)</th>
+                                <th>Hind (€)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <xsl:for-each select="restoran/menyy/tooted/jook">
+                                <tr>
+                                    <td><xsl:value-of select="nimetus"/></td>
+                                    <td><xsl:value-of select="@liik"/></td>
+                                    <td><xsl:value-of select="tootja"/></td>
+                                    <td><xsl:value-of select="@maht"/></td>
+                                    <td><xsl:value-of select="alkoholiProtsent"/></td>
+                                    <td><xsl:value-of select="hind"/></td>
+                                </tr>
+                            </xsl:for-each>
+                        </tbody>
+                    </table>
                 </section>
                 
                 <section class="service-section">
@@ -110,7 +132,6 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Laud</th>
                                 <th>Klient</th>
                                 <th>Telefon</th>
@@ -123,7 +144,6 @@
                         <tbody>
                             <xsl:for-each select="restoran/tellimused/tellimus">
                                 <tr>
-                                    <td><xsl:value-of select="@id"/></td>
                                     <td><xsl:value-of select="@laud_id"/></td>
                                     <td><xsl:value-of select="kliendi_info/nimi"/></td>
                                     <td><xsl:value-of select="kliendi_info/telefon"/></td>

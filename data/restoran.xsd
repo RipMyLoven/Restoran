@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     
-    <!-- Root element -->
     <xs:element name="restoran">
         <xs:complexType>
             <xs:sequence>
@@ -12,14 +11,12 @@
         </xs:complexType>
     </xs:element>
     
-    <!-- Menyy Type -->
     <xs:complexType name="MenyyType">
         <xs:sequence>
             <xs:element name="tooted" type="ToitedType"/>
         </xs:sequence>
     </xs:complexType>
     
-    <!-- Tooted Type -->
     <xs:complexType name="ToitedType">
         <xs:sequence>
             <xs:element name="toit" type="ToitType" maxOccurs="unbounded"/>
@@ -27,7 +24,6 @@
         </xs:sequence>
     </xs:complexType>
     
-    <!-- Toit Type -->
     <xs:complexType name="ToitType">
         <xs:sequence>
             <xs:element name="nimetus" type="xs:string"/>
@@ -39,7 +35,6 @@
         <xs:attribute name="hind" type="xs:decimal" use="required"/>
     </xs:complexType>
     
-    <!-- Jook Type -->
     <xs:complexType name="JookType">
         <xs:sequence>
             <xs:element name="nimetus" type="xs:string"/>
@@ -52,7 +47,6 @@
         <xs:attribute name="maht" type="xs:decimal" use="required"/>
     </xs:complexType>
     
-    <!-- Teenindus Type -->
     <xs:complexType name="TeenindusType">
         <xs:sequence>
             <xs:element name="lauad" type="LauadType"/>
@@ -60,14 +54,12 @@
         </xs:sequence>
     </xs:complexType>
     
-    <!-- Lauad Type -->
     <xs:complexType name="LauadType">
         <xs:sequence>
             <xs:element name="laud" type="LaudType" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     
-    <!-- Laud Type -->
     <xs:complexType name="LaudType">
         <xs:sequence>
             <xs:element name="reserveeritud" type="xs:string"/>
@@ -78,14 +70,12 @@
         <xs:attribute name="asukoht" type="xs:string" use="required"/>
     </xs:complexType>
     
-    <!-- Teenindajad Type -->
     <xs:complexType name="TeenindajadType">
         <xs:sequence>
             <xs:element name="teenindaja" type="TeenindajaType" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     
-    <!-- Teenindaja Type -->
     <xs:complexType name="TeenindajaType">
         <xs:sequence>
             <xs:element name="nimi" type="xs:string"/>
@@ -96,14 +86,12 @@
         <xs:attribute name="kogemus" type="xs:positiveInteger" use="required"/>
     </xs:complexType>
     
-    <!-- Tellimused Type -->
     <xs:complexType name="TellimusedType">
         <xs:sequence>
             <xs:element name="tellimus" type="TellimusType" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     
-    <!-- Tellimus Type -->
     <xs:complexType name="TellimusType">
         <xs:sequence>
             <xs:element name="tellimuse_aeg" type="xs:string"/>
@@ -117,7 +105,6 @@
         <xs:attribute name="prioriteet" type="xs:string" use="required"/>
     </xs:complexType>
     
-    <!-- Kliendi Info Type -->
     <xs:complexType name="KliendiInfoType">
         <xs:sequence>
             <xs:element name="nimi" type="xs:string"/>

@@ -3,7 +3,6 @@
     <xsl:output method="html" encoding="UTF-8" indent="yes"/>
     
     <xsl:template match="/">
-        <!DOCTYPE html>
         <html lang="et">
         <head>
             <meta charset="UTF-8"/>
