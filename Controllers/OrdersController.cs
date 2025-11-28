@@ -195,9 +195,10 @@ namespace Restoran.Controllers
                 return NotFound();
             }
 
-            if (order.Status != OrderStatus.New)
+            // Allow updates for New and InProgress orders only
+            if (order.Status == OrderStatus.Completed || order.Status == OrderStatus.Cancelled)
             {
-                return BadRequest("Can only update orders with 'New' status");
+                return BadRequest("Cannot update completed or cancelled orders");
             }
 
             // Update basic fields

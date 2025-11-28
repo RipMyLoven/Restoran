@@ -20,7 +20,7 @@ namespace Restoran.Controllers
         }
 
         [HttpPost("orders/{orderId}/invoice")]
-        [Authorize(Roles = "Admin,Manager,Waiter")]
+        [Authorize(Roles = "Admin,Manager,Waiter,Customer")]
         public async Task<ActionResult<InvoiceDto>> CreateInvoice(int orderId, CreateInvoiceDto createInvoiceDto)
         {
             var order = await _context.Orders

@@ -19,6 +19,27 @@ namespace Restoran.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAllMenuItems()
+        {
+            var menuItems = await _context.MenuItems
+                .Select(m => new MenuItemDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Description = m.Description,
+                    Price = m.Price,
+                    Category = m.Category,
+                    AllergyInfo = m.Allergens,
+                    DietInfo = m.DietaryInfo,
+                    IsAvailable = m.IsAvailable,
+                    RestaurantId = m.RestaurantId,
+                    CreatedAt = DateTime.Now
+                }).ToListAsync();
+
+            return Ok(menuItems);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<MenuItemDto>> GetMenuItem(int id)
         {
@@ -44,6 +65,42 @@ namespace Restoran.Controllers
             }
 
             return Ok(menuItem);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Manager,Waiter")]
+        public async Task<ActionResult<MenuItemDto>> CreateMenuItem(CreateMenuItemDto createMenuItemDto)
+        {
+            var menuItem = new MenuItem
+            {
+                Name = createMenuItemDto.Name,
+                Description = createMenuItemDto.Description,
+                Price = createMenuItemDto.Price,
+                Category = createMenuItemDto.Category,
+                Allergens = createMenuItemDto.AllergyInfo,
+                DietaryInfo = createMenuItemDto.DietInfo,
+                IsAvailable = createMenuItemDto.IsAvailable,
+                RestaurantId = createMenuItemDto.RestaurantId
+            };
+
+            _context.MenuItems.Add(menuItem);
+            await _context.SaveChangesAsync();
+
+            var menuItemDto = new MenuItemDto
+            {
+                Id = menuItem.Id,
+                Name = menuItem.Name,
+                Description = menuItem.Description,
+                Price = menuItem.Price,
+                Category = menuItem.Category,
+                AllergyInfo = menuItem.Allergens,
+                DietInfo = menuItem.DietaryInfo,
+                IsAvailable = menuItem.IsAvailable,
+                RestaurantId = menuItem.RestaurantId,
+                CreatedAt = DateTime.Now
+            };
+
+            return CreatedAtAction(nameof(GetMenuItem), new { id = menuItem.Id }, menuItemDto);
         }
 
         [HttpPut("{id}")]
@@ -125,7 +182,7 @@ namespace Restoran.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetRestaurantMenu(int restaurantId)
+        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetRestaurantMenu([FromRoute] int restaurantId)
         {
             var menuItems = await _context.MenuItems
                 .Where(m => m.RestaurantId == restaurantId)
@@ -148,7 +205,7 @@ namespace Restoran.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<ActionResult<MenuItemDto>> CreateMenuItem(int restaurantId, CreateMenuItemDto createMenuItemDto)
+        public async Task<ActionResult<MenuItemDto>> CreateMenuItem([FromRoute] int restaurantId, CreateMenuItemDto createMenuItemDto)
         {
             // Check if restaurant exists
             var restaurant = await _context.Restaurants.FindAsync(restaurantId);

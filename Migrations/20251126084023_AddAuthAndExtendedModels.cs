@@ -270,7 +270,7 @@ namespace Restoran.Migrations
                 column: "AssignedWaiterId",
                 principalTable: "Users",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.SetNull);
+                onDelete: ReferentialAction.NoAction);
         }
 
         /// <inheritdoc />

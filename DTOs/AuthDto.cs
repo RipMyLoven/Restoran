@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Restoran.Models;
 
 namespace Restoran.DTOs
 {
@@ -25,6 +26,8 @@ namespace Restoran.DTOs
         public string PhoneNumber { get; set; } = string.Empty;
 
         public int? RestaurantId { get; set; }
+
+        public UserRole Role { get; set; } = UserRole.Customer;
     }
 
     public class LoginDto

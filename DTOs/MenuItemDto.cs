@@ -35,6 +35,7 @@ namespace Restoran.DTOs
         public string AllergyInfo { get; set; } = string.Empty;
         public string DietInfo { get; set; } = string.Empty;
         public bool IsAvailable { get; set; } = true;
+        public int RestaurantId { get; set; } = 1; // Default to 1
     }
 
     public class UpdateMenuItemDto

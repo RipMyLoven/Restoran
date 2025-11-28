@@ -131,6 +131,18 @@ Authorization: Bearer {{accessToken}}
 GET {{baseUrl}}/archive/orders HTTP/1.1
 Authorization: Bearer {{accessToken}}
 
+### Get All Notifications
+GET {{baseUrl}}/notifications HTTP/1.1
+Authorization: Bearer {{accessToken}}
+
+### Notify Cook about Order (replace 1 with actual order ID)
+POST {{baseUrl}}/notifications/orders/1/notify/cook HTTP/1.1
+Authorization: Bearer {{accessToken}}
+
+### Notify Waiter about Order Ready (replace 1 with actual order ID)
+POST {{baseUrl}}/notifications/orders/1/notify/waiter HTTP/1.1
+Authorization: Bearer {{accessToken}}
+
 ### Refresh Token (replace with actual refresh token)
 POST {{baseUrl}}/auth/refresh HTTP/1.1
 Content-Type: application/json

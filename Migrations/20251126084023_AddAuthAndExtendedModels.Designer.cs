@@ -602,7 +602,7 @@ namespace Restoran.Migrations
                     b.HasOne("Restoran.Models.User", "AssignedWaiter")
                         .WithMany("Orders")
                         .HasForeignKey("AssignedWaiterId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Restoran.Models.Restaurant", "Restaurant")
                         .WithMany("Orders")

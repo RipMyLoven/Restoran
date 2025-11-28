@@ -42,7 +42,7 @@ namespace Restoran.Controllers
                 LastName = registerDto.LastName,
                 PhoneNumber = registerDto.PhoneNumber,
                 RestaurantId = registerDto.RestaurantId,
-                Role = UserRole.Customer
+                Role = registerDto.Role
             };
 
             _context.Users.Add(user);

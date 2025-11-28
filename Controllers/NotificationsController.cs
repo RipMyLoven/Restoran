@@ -19,6 +19,27 @@ namespace Restoran.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<NotificationDto>>> GetAllNotifications()
+        {
+            var notifications = await _context.Notifications
+                .Include(n => n.Order)
+                .OrderByDescending(n => n.CreatedAt)
+                .Select(n => new NotificationDto
+                {
+                    Id = n.Id,
+                    UserId = n.UserId,
+                    OrderId = n.OrderId,
+                    Type = n.Type,
+                    Message = n.Message,
+                    IsRead = n.IsRead,
+                    CreatedAt = n.CreatedAt
+                })
+                .ToListAsync();
+
+            return Ok(notifications);
+        }
+
         [HttpPost("orders/{orderId}/notify/cook")]
         [Authorize(Roles = "Admin,Manager,Waiter")]
         public async Task<IActionResult> NotifyCook(int orderId)
